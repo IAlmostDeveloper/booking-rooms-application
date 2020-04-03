@@ -18,6 +18,7 @@ class requestHandler(BaseHTTPRequestHandler):
         if userSessionTokens.__contains__(token) or adminSessionTokens.__contains__(token):
             self.send_response(200)
             self.send_header('content-type', 'application/json')
+            self.end_headers()
             if parsed[0] == 'hotels':
                 hotelsList = DatabaseManager.getHotels()
                 print(hotelsList)
@@ -36,11 +37,12 @@ class requestHandler(BaseHTTPRequestHandler):
                 self.wfile.write(json.dumps(clientsList).encode())
 
             if parsed[0] == 'users':
-                usersList = DatabaseManager.getUsers()
-                self.wfile.write(json.dumps(usersList).encode())
+                if adminSessionTokens.__contains__(token):
+                    usersList = DatabaseManager.getUsers()
+                    self.wfile.write(json.dumps(usersList).encode())
         else:
             self.send_error(403)
-        self.end_headers()
+            self.end_headers()
 
     def do_POST(self):
         content_len = int(self.headers.get('Content-Length'))
@@ -50,28 +52,15 @@ class requestHandler(BaseHTTPRequestHandler):
             if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
                 self.send_response(200)
                 if self.path.endswith('/hotel'):
-                    DatabaseManager.addHotel(jsonresult["name"],
-                                             jsonresult["available"],
-                                             jsonresult["address"])
-
+                    addHotel(jsonresult)
                 if self.path.endswith('/room'):
-                    DatabaseManager.addRoom(jsonresult["available"],
-                                            jsonresult["description"])
-
+                    addRoom(jsonresult)
                 if self.path.endswith('/rent'):
-                    DatabaseManager.addRent(jsonresult["roomId"],
-                                            jsonresult["fromDate"],
-                                            jsonresult["toDate"])
-
+                    addRent(jsonresult)
                 if self.path.endswith('/client'):
-                    DatabaseManager.addClient(jsonresult["firstName"],
-                                              jsonresult["lastName"],
-                                              jsonresult["passport"])
-
+                    addClient(jsonresult)
                 if self.path.endswith('/user'):
-                    DatabaseManager.addUser(jsonresult["login"],
-                                            jsonresult["password"],
-                                            jsonresult["rights"])
+                    addUser(jsonresult)
             else:
                 self.send_error(403)
             self.end_headers()
@@ -81,6 +70,7 @@ class requestHandler(BaseHTTPRequestHandler):
                 self.send_response(200)
             else:
                 self.send_error(400)
+            self.end_headers()
 
         if self.path.endswith('/auth'):
             token = authorizeUser(jsonresult['login'], jsonresult['password'])
@@ -93,6 +83,36 @@ class requestHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({
                 'token': token
             }).encode())
+
+
+def addHotel(jsonresult):
+    DatabaseManager.addHotel(jsonresult["name"],
+                             jsonresult["available"],
+                             jsonresult["address"])
+
+
+def addRoom(jsonresult):
+    DatabaseManager.addRoom(jsonresult["available"],
+                            jsonresult["description"])
+
+
+def addRent(jsonresult):
+    DatabaseManager.addRent(jsonresult["userId"],
+                            jsonresult["roomId"],
+                            jsonresult["fromDate"],
+                            jsonresult["toDate"])
+
+
+def addClient(jsonresult):
+    DatabaseManager.addClient(jsonresult["firstName"],
+                              jsonresult["lastName"],
+                              jsonresult["passport"])
+
+
+def addUser(jsonresult):
+    DatabaseManager.addUser(jsonresult["login"],
+                            jsonresult["password"],
+                            jsonresult["rights"])
 
 
 def registerUser(login, password, rights):
