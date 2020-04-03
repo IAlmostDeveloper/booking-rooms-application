@@ -23,6 +23,7 @@ class DatabaseManager:
             )""")
             cursor.execute("""create table rents(
             id integer primary key,
+            userId integer,
             roomId integer,
             fromDate integer,
             toDate integer
@@ -61,9 +62,10 @@ class DatabaseManager:
         conn.commit()
 
     @staticmethod
-    def addRent(roomId, fromDate, toDate):
+    def addRent(userId, roomId, fromDate, toDate):
         cursor.execute(
-            "insert into rents(roomId, fromDate, toDate) values ('{roomId}' , '{fromDate}', '{toDate}')".format(
+            "insert into rents(roomId, fromDate, toDate) values ('{userId}', '{roomId}' , '{fromDate}', '{toDate}')".format(
+                userId=userId,
                 roomId=roomId,
                 fromDate=fromDate,
                 toDate=toDate))
@@ -145,4 +147,12 @@ class DatabaseManager:
             "select rights from users where login='{login}'".format(login=login))
         conn.commit()
         result = cursor.fetchone()
+        return result
+
+    @classmethod
+    def getUserRents(cls, userId):
+        cursor.execute(
+            "select * from rents where userId='{userId}'".format(userId=userId))
+        conn.commit()
+        result = cursor.fetchall()
         return result
