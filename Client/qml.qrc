@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>HotelsForm.qml</file>
+        <file>RegisterForm.qml</file>
+        <file>LoginForm.qml</file>
+        <file>BottomMenu.qml</file>
+        <file>BottomMenuButton.qml</file>
     </qresource>
 </RCC>
