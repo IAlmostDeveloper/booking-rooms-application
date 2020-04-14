@@ -1,26 +1,63 @@
-import QtQuick 2.0
+import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import io.qt.models.hotels 1.0
+import HotelsModel 1.0
+
 Item {
+    id: hotelsForm
+    function clearList(){
+        tableModel.clear();
+    }
+    state: hotelsForm.width >= hotelsForm.height * 1.75 ? "Landscape" : "Portrait"
+    states:[
+        State{
+            name: "Portrait"
+            PropertyChanges {
+                target: fieldsLayout
+                columns: 2
+            }
+        },
+        State{
+            name: "Landscape"
+            PropertyChanges {
+                target: fieldsLayout
+                columns: 4
+            }
+        }
+    ]
     HotelsModel{
         id: hotelsModel
         onHotelsDataReceived: {
+            clearList();
             for(var i=0;i<hotelsData.length;i++){
-                console.log(hotelsData[i]);
-                listModel.append({nameText: hotelsData[i].name,
+                tableModel.append({nameText: hotelsData[i].name,
                                   addressText: hotelsData[i].address,
-                                  descriptionText: hotelsData[i].id,
-                                  availableText:hotelsData[i].available,});
+                                  idText: hotelsData[i].id,
+                                  availableText: hotelsData[i].available ? "Yes" : "No"});
             }
+        }
+
+        onHotelsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
+
+        onAddHotelSuccess: {
+            console.log("added successfully");
+            hotelsModel.getParsedHotelsList();
+
+        }
+        onAddHotelError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
         }
     }
 
     Button {
         id: getHotelsButton
-        text: qsTr("Create Button")
+        text: qsTr("Get hotels list")
         anchors.horizontalCenter: parent.horizontalCenter
-        width: (parent.width / 5)*2
+        width: parent.width / 2.5
         height: 50
 
         onClicked: {
@@ -29,45 +66,120 @@ Item {
     }
 
     ListView {
-        id: listView1
+        id: hotelsListView
 
         anchors.top: getHotelsButton.bottom
-        anchors.bottom: parent.bottom
+        anchors.bottom: fieldsLayout.top
         anchors.left: parent.left
         anchors.right: parent.right
 
-        delegate: Item {
-            id: item
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: 40
+        delegate:
+            Item {
+                id: item
+                anchors.left: parent.left
+                anchors.right: parent.right
+                height: 40
 
-            Row{
-                anchors.horizontalCenter: parent.horizontalCenter
-                spacing: 20
-                Text{
-                    id: name
-                    text: nameText
-                }
+                Rectangle{
+                    anchors.fill: parent
+                    color: "#ffff00"
 
-                Text{
-                    id: address
-                    text: addressText
-                }
+                    Row{
+                        width: parent.width
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        spacing: 20
 
-                Text{
-                    id: description
-                    text: descriptionText
+                        Text{
+                            id: name
+                            width: parent.width / 4
+                            text: nameText
+                        }
+
+                        Text{
+                            id: address
+                            width: parent.width / 3
+                            text: addressText
+                        }
+
+                        Column{
+                            width: parent.width / 4
+                            spacing: 5
+                            Text{
+                                id: id
+                                text: "Id: " + idText
+                            }
+                            Text{
+                                id: available
+                                text: "Available: " + availableText
+                            }
+                        }
+                    }
                 }
-                Text{
-                    id: available
-                    text: availableText
-                }
-            }
         }
 
         model: ListModel {
-            id: listModel
+            id: tableModel
+        }
+    }
+
+    GridLayout{
+        id: fieldsLayout
+        anchors{
+            bottom: parent.bottom
+            horizontalCenter: parent.horizontalCenter
+        }
+
+        columns: 4
+        rows: 1
+        columnSpacing: 10
+
+        Column{
+            spacing: 5
+            Text{
+                text: qsTr("Name")
+            }
+
+            TextField{
+              id: hotelNameField
+            }
+        }
+
+        Column{
+            spacing: 5
+            Text{
+                text: qsTr("Address")
+            }
+
+            TextField{
+              id: hotelAddressField
+            }
+        }
+
+        Column{
+            spacing: 5
+            Text{
+                text: qsTr("Available")
+            }
+
+            ComboBox{
+                id: hotelAvailableField
+                model: ["Yes", "No"]
+            }
+        }
+
+        Column{
+            spacing: 10
+            Text{
+            }
+
+            Button{
+                id: addHotelButton
+                text: qsTr("Add");
+                onClicked: {
+                    hotelsModel.addHotelToDatabase(hotelNameField.text,
+                                                   hotelAddressField.text, hotelAvailableField.currentText=="Yes")
+                }
+            }
         }
     }
 }
