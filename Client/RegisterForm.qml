@@ -3,7 +3,7 @@ import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
-import io.qt.auth.manager 1.0
+import AuthManager 1.0
 
 Item {
     id:registrationForm
@@ -67,7 +67,6 @@ Item {
              text: "Sign up"
              Layout.alignment: Layout.Center
              onClicked: {
-                isProcessingAuth = enabled;
                 regManager.reg(signUpLogin.text, signUpPassword.text);
                 clearFields();
              }
@@ -86,7 +85,6 @@ Item {
         id: regManager
         onRegFinished:{
             console.log("Reg finished!");
-            isProcessingAuth = false;
         }
         onRegFailed: {
             console.log("Reg failed!");

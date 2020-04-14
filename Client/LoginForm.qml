@@ -2,7 +2,7 @@ import QtQuick 2.14
 import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import io.qt.auth.manager 1.0
+import AuthManager 1.0
 
 Item{
     id: loginForm
@@ -65,7 +65,6 @@ Item{
                  text: "Sign in"
                  Layout.alignment: Layout.Center
                  onClicked: {
-                     isProcessingAuth = enabled;
                      authManager.auth(signInLogin.text, signInPassword.text);
                      clearFields();
                  }
