@@ -10,9 +10,13 @@ class HotelsModel : public QObject
 public:
     explicit HotelsModel(QObject *parent = nullptr);
     Q_INVOKABLE void getParsedHotelsList();
+    Q_INVOKABLE void addHotelToDatabase(const QString& name, const QString& address, bool available);
 
 signals:
     void hotelsDataReceived(const QList<QObject*>& hotelsData);
+    void hotelsDataReceiveError(const QString& error);
+    void addHotelSuccess();
+    void addHotelError(const QString& error);
 private:
     QList<QObject*> m_hotels;
     QNetworkAccessManager m_net;
