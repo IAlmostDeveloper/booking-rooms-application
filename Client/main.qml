@@ -6,10 +6,10 @@ import QtQuick.Dialogs 1.1
 Window {
     id: root
     visible: true
-    width: 320
-    height: 600
-    minimumWidth: 320
-    minimumHeight: 400
+    width: 640
+    height: 480
+    minimumWidth: 460
+    minimumHeight: 420
     title: qsTr("Authorization")
 
     property var applicationForms: {
@@ -17,7 +17,6 @@ Window {
         "SignUp" : "RegisterForm.qml",
         "Hotels" : "HotelsForm.qml"
     }
-    property bool isProcessingAuth : false
 
     Loader{
         id: mainLoader
