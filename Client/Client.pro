@@ -14,9 +14,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += main.cpp \
-    Hotelsmodel.cpp \
-    Hotelobjdect.cpp \
-    Authmanager.cpp
+    Models/Authmanager.cpp \
+    Models/Hotelsmodel.cpp \
+    Objects/Hotelobjdect.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,6 +34,15 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Hotelsmodel.hpp \
     Hotelobjdect.hpp \
-    Authmanager.hpp
+    Authmanager.hpp \
+    Models/Authmanager.hpp \
+    Models/Hotelsmodel.hpp \
+    Objects/Hotelobjdect.hpp
 
-DISTFILES +=
+DISTFILES += \
+    Forms/LoginForm.qml \
+    Forms/MainForm.qml \
+    Forms/RegisterForm.qml \
+    InfoBlocks/RoomsBlock.qml \
+    InfoBlocks/RentsBlock.qml \
+    InfoBlocks/HotelsBlock.qml

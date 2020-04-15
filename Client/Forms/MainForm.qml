@@ -14,21 +14,21 @@ Item {
         TabButton{
             text: "Hotels"
             onClicked: {
-                blockLoader.source = "HotelsBlock.qml"
+                blockLoader.source = "qrc:/InfoBlocks/HotelsBlock.qml"
             }
         }
 
         TabButton{
             text: "Rooms"
             onClicked: {
-                blockLoader.source = "RoomsBlock.qml"
+                blockLoader.source = "qrc:/InfoBlocks/RoomsBlock.qml"
             }
         }
 
         TabButton{
             text: "Rents"
             onClicked: {
-                blockLoader.source = "RentsBlock.qml"
+                blockLoader.source = "qrc:/InfoBlocks/RentsBlock.qml"
             }
         }
     }
@@ -38,7 +38,6 @@ Item {
         width: parent.width
         height: parent.height - tabBar.height - 20
         anchors.top: tabBar.bottom
-        source: "HotelsBlock.qml"
+        source: "qrc:/InfoBlocks/HotelsBlock.qml"
     }
-
 }

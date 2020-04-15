@@ -13,9 +13,9 @@ Window {
     title: qsTr("Authorization")
 
     property var applicationForms: {
-        "SignIn": "LoginForm.qml",
-        "SignUp" : "RegisterForm.qml",
-        "Hotels" : "HotelsForm.qml"
+        "SignIn": "Forms/LoginForm.qml",
+        "SignUp" : "Forms/RegisterForm.qml",
+        "Hotels" : "Forms/MainForm.qml"
     }
 
     Loader{
@@ -43,8 +43,5 @@ Window {
         title: "Error"
         text: "Error here!"
         icon: StandardIcon.Critical
-        onAccepted: {
-            isProcessingAuth = false;
-      }
    }
 }
