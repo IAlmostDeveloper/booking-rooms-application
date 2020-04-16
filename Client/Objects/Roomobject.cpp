@@ -4,3 +4,55 @@ RoomObject::RoomObject(QObject *parent) : QObject(parent)
 {
 
 }
+
+RoomObject::RoomObject(int id, int hotelId, const QString &description, bool available)
+{
+    setId(id);
+    setHotelId(hotelId);
+    setDescription(description);
+    setAvailable(available);
+}
+
+int RoomObject::id()
+{
+    return m_id;
+}
+
+int RoomObject::hotelId()
+{
+    return m_hotelId;
+}
+
+QString RoomObject::description()
+{
+    return m_description;
+}
+
+bool RoomObject::available()
+{
+    return m_available;
+}
+
+void RoomObject::setId(int value)
+{
+    m_id = value;
+    emit idChanged(value);
+}
+
+void RoomObject::setHotelId(int value)
+{
+    m_hotelId = value;
+    emit hotelIdChanged(value);
+}
+
+void RoomObject::setDescription(const QString &value)
+{
+    m_description = value;
+    emit descriptionChanged(value);
+}
+
+void RoomObject::setAvailable(bool value)
+{
+    m_available = value;
+    emit availableChanged(value);
+}
