@@ -13,23 +13,26 @@ class DatabaseManager:
             cursor.execute("""create table hotels(
             id integer primary key,
             name text unique,
-            available numeric,
-            address text
+            address text,
+            description text,
+            available numeric
             )""")
             cursor.execute("""create table rooms(
             id integer primary key,
-            available numeric,
-            description text
+            hotelId integer,
+            description text,
+            available numeric        
             )""")
             cursor.execute("""create table rents(
             id integer primary key,
-            userId integer,
             roomId integer,
+            userId integer,
             fromDate integer,
             toDate integer
             )""")
             cursor.execute("""create table clients(
             id integer primary key,
+            userId integer,
             firstname text,
             lastname text,
             passport text unique
@@ -45,36 +48,45 @@ class DatabaseManager:
         return count
 
     @staticmethod
-    def addHotel(name, available, address):
+    def addHotel(name, address, description, available):
         cursor.execute(
-            "insert into hotels(name, available, address) values ('{name}' , '{available}', '{address}')".format(
+            "insert into hotels(name, address, description, available) "
+            "values ('{name}' , '{address}', '{description}','{available}')".format(
                 name=name,
-                available=available,
-                address=address))
+                address=address,
+                description=description,
+                available=available
+                ))
         conn.commit()
 
     @staticmethod
-    def addRoom(available, description):
+    def addRoom(hotelId, description, available):
         cursor.execute(
-            "insert into rooms(available, description) values ('{available}', '{description}')".format(
-                available=available,
-                description=description))
+            "insert into rooms(hotelId, description, available) "
+            "values ('{hotelId}', '{description}', '{available}')".format(
+                hotelId=hotelId,
+                description=description,
+                available=available
+            ))
         conn.commit()
 
     @staticmethod
-    def addRent(userId, roomId, fromDate, toDate):
+    def addRent(roomId, userId, fromDate, toDate):
         cursor.execute(
-            "insert into rents(roomId, fromDate, toDate) values ('{userId}', '{roomId}' , '{fromDate}', '{toDate}')".format(
-                userId=userId,
+            "insert into rents(roomId, userId, fromDate, toDate) "
+            "values ('{roomId}' , '{userId}', '{fromDate}', '{toDate}')".format(
                 roomId=roomId,
+                userId=userId,
                 fromDate=fromDate,
                 toDate=toDate))
         conn.commit()
 
     @staticmethod
-    def addClient(firstName, lastName, passport):
+    def addClient(userId, firstName, lastName, passport):
         cursor.execute(
-            "insert into clients(firstName, lastName, passport) values ('{firstName}' , '{lastName}', '{passport}')".format(
+            "insert into clients(userId, firstName, lastName, passport) "
+            "values ('{userId}', '{firstName}' , '{lastName}', '{passport}')".format(
+                userId=userId,
                 firstName=firstName,
                 lastName=lastName,
                 passport=passport))
@@ -83,7 +95,8 @@ class DatabaseManager:
     @staticmethod
     def addUser(login, password, rights):
         cursor.execute(
-            "insert into users(login, password, rights) values ('{login}' , '{password}', '{rights}')".format(
+            "insert into users(login, password, rights) "
+            "values ('{login}' , '{password}', '{rights}')".format(
                 login=login,
                 password=password,
                 rights=rights))
@@ -93,66 +106,83 @@ class DatabaseManager:
     def getHotels(cls):
         cursor.execute("select * from hotels")
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
+
+    @classmethod
+    def getAvailableHotels(cls):
+        cursor.execute("select * from hotels where available=1")
+        conn.commit()
+        return cursor.fetchall()
 
     @classmethod
     def getRooms(cls):
         cursor.execute("select * from rooms")
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
 
     @classmethod
-    def getRents(cls):
+    def getAvailableRooms(cls):
+        cursor.execute("select * from rooms where available=1")
+        conn.commit()
+        return cursor.fetchall()
+
+    @classmethod
+    def getHotelRooms(cls, hotelId):
+        cursor.execute("select * from rooms where hotelId='{hotelId}'".format(hotelId=hotelId))
+        conn.commit()
+        return cursor.fetchall()
+
+    @classmethod
+    def getHotelAvailableRooms(cls, hotelId):
+        cursor.execute("select * from rooms where hotelId='{hotelId}' and available=1".format(hotelId=hotelId))
+        conn.commit()
+        return cursor.fetchall()
+
+    @classmethod
+    def getAllRents(cls):
         cursor.execute("select * from rents")
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
+
+    @classmethod
+    def getRoomRents(cls, roomId):
+        cursor.execute("select * from rents where roomId='{roomId}'".format(roomId=roomId))
+        conn.commit()
+        return cursor.fetchall()
+
+    @classmethod
+    def getUserRents(cls, userId):
+        cursor.execute("select * from rents where userId='{userId}'".format(userId=userId))
+        conn.commit()
+        return cursor.fetchall()
 
     @classmethod
     def getClients(cls):
         cursor.execute("select * from clients")
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
 
     @classmethod
     def getUsers(cls):
         cursor.execute("select * from users")
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
 
     @classmethod
     def checkUser(cls, login):
-        cursor.execute(
-            "select * from users where login='{login}'".format(login=login))
+        cursor.execute("select * from users where login='{login}'".format(login=login))
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
 
     @classmethod
     def getUser(cls, login, password):
-        cursor.execute(
-            "select * from users where login='{login}' and password='{password}'".format(login=login,
-                                                                                         password=password))
+        cursor.execute("select * from users where login='{login}' and password='{password}'"
+                       .format(login=login, password=password))
         conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchall()
 
     @classmethod
     def getUserRights(cls, login):
-        cursor.execute(
-            "select rights from users where login='{login}'".format(login=login))
+        cursor.execute("select rights from users where login='{login}'".format(login=login))
         conn.commit()
-        result = cursor.fetchone()
-        return result
-
-    @classmethod
-    def getUserRents(cls, userId):
-        cursor.execute(
-            "select * from rents where userId='{userId}'".format(userId=userId))
-        conn.commit()
-        result = cursor.fetchall()
-        return result
+        return cursor.fetchone()

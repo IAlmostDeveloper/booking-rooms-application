@@ -21,15 +21,46 @@ class requestHandler(BaseHTTPRequestHandler):
             self.end_headers()
             if parsed[0] == 'hotels':
                 hotelsList = DatabaseManager.getHotels()
-                print(hotelsList)
+                self.wfile.write(json.dumps(hotelsList).encode())
+
+            if parsed[0] == 'available-hotels':
+                hotelsList = DatabaseManager.getAvailableHotels()
                 self.wfile.write(json.dumps(hotelsList).encode())
 
             if parsed[0] == 'rooms':
                 roomsList = DatabaseManager.getRooms()
                 self.wfile.write(json.dumps(roomsList).encode())
 
+            if parsed[0] == 'available-rooms':
+                roomsList = DatabaseManager.getAvailableRooms()
+                self.wfile.write(json.dumps(roomsList).encode())
+
+            if parsed[0] == 'hotel-rooms':
+                if len(parsed) < 5 or parsed[3] != 'hotel':
+                    return
+                roomsList = DatabaseManager.getHotelRooms(parsed[4])
+                self.wfile.write(json.dumps(roomsList).encode())
+
+            if parsed[0] == 'hotel-available-rooms':
+                if len(parsed) < 5 or parsed[3] != 'hotel':
+                    return
+                roomsList = DatabaseManager.getHotelAvailableRooms(parsed[4])
+                self.wfile.write(json.dumps(roomsList).encode())
+
             if parsed[0] == 'rents':
-                rentsList = DatabaseManager.getRents()
+                rentsList = DatabaseManager.getAllRents()
+                self.wfile.write(json.dumps(rentsList).encode())
+
+            if parsed[0] == 'room-rents':
+                if len(parsed) < 5 or parsed[3] != 'room':
+                    return
+                rentsList = DatabaseManager.getRoomRents(parsed[4])
+                self.wfile.write(json.dumps(rentsList).encode())
+
+            if parsed[0] == 'user-rents':
+                if len(parsed) < 5 or parsed[3] != 'user':
+                    return
+                rentsList = DatabaseManager.getRoomRents(parsed[4])
                 self.wfile.write(json.dumps(rentsList).encode())
 
             if parsed[0] == 'clients':
@@ -87,24 +118,27 @@ class requestHandler(BaseHTTPRequestHandler):
 
 def addHotel(jsonresult):
     DatabaseManager.addHotel(jsonresult["name"],
-                             jsonresult["available"],
-                             jsonresult["address"])
+                             jsonresult["address"],
+                             jsonresult["description"],
+                             jsonresult["available"])
 
 
 def addRoom(jsonresult):
-    DatabaseManager.addRoom(jsonresult["available"],
-                            jsonresult["description"])
+    DatabaseManager.addRoom(jsonresult["hotelId"],
+                            jsonresult["description"],
+                            jsonresult["available"])
 
 
 def addRent(jsonresult):
-    DatabaseManager.addRent(jsonresult["userId"],
-                            jsonresult["roomId"],
+    DatabaseManager.addRent(jsonresult["roomId"],
+                            jsonresult["userId"],
                             jsonresult["fromDate"],
                             jsonresult["toDate"])
 
 
 def addClient(jsonresult):
-    DatabaseManager.addClient(jsonresult["firstName"],
+    DatabaseManager.addClient(jsonresult["userId"],
+                              jsonresult["firstName"],
                               jsonresult["lastName"],
                               jsonresult["passport"])
 
