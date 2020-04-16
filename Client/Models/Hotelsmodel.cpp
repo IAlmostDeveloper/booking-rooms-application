@@ -26,13 +26,11 @@ void HotelsModel::getParsedHotelsList()
         else
         {
             QString document = reply->readAll();
-            qDebug() << document;
             QList<QObject*> hotelsList = QList<QObject*>();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
             for(auto i : raw)
             {
                 QStringList hotelRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
-                qDebug() << hotelRaw;
                 int id = hotelRaw[0].toInt();
                 QString name = hotelRaw[1].replace("\"", "");
                 QString address = hotelRaw[2].replace("\"", "").replace("]", "");
