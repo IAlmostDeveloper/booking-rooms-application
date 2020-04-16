@@ -35,9 +35,11 @@ Item {
         onHotelsDataReceived: {
             clearList();
             for(var i=0;i<hotelsData.length;i++){
-                tableModel.append({nameText: hotelsData[i].name,
-                                  addressText: hotelsData[i].address,
+                tableModel.append({
                                   idText: hotelsData[i].id,
+                                  nameText: hotelsData[i].name,
+                                  addressText: hotelsData[i].address,
+                                  descriptionText : hotelsData[i].description,
                                   availableText: hotelsData[i].available ? "Yes" : "No"});
             }
         }
@@ -104,8 +106,14 @@ Item {
 
                         Text{
                             id: address
-                            width: parent.width / 3
+                            width: parent.width / 4
                             text: addressText
+                        }
+
+                        Text{
+                            id: description
+                            width: parent.width / 4
+                            text: descriptionText
                         }
 
                         Column{
@@ -175,6 +183,18 @@ Item {
         }
 
         Column{
+            spacing: 5
+            Text{
+                text: qsTr("Description")
+            }
+
+            TextField{
+              id: hotelDescriptionField
+            }
+        }
+
+
+        Column{
             spacing: 10
 
             Text{
@@ -185,7 +205,9 @@ Item {
                 text: qsTr("Add");
                 onClicked: {
                     hotelsModel.addHotelToDatabase(hotelNameField.text,
-                                                   hotelAddressField.text, hotelAvailableField.currentText=="Yes")
+                                                   hotelAddressField.text,
+                                                   hotelDescriptionField.text,
+                                                   hotelAvailableField.currentText=="Yes")
                 }
             }
         }
