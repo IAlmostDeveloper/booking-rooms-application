@@ -16,7 +16,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp \
     Models/Authmanager.cpp \
     Models/Hotelsmodel.cpp \
-    Objects/Hotelobjdect.cpp
+    Objects/Hotelobjdect.cpp \
+    Models/Roomsmodel.cpp \
+    Objects/Roomobject.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,7 +36,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     Models/Authmanager.hpp \
     Models/Hotelsmodel.hpp \
-    Objects/Hotelobjdect.hpp
+    Objects/Hotelobjdect.hpp \
+    Models/Roomsmodel.hpp \
+    Objects/Roomobject.hpp
 
 DISTFILES += \
     Forms/LoginForm.qml \
