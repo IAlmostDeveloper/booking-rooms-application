@@ -1,8 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "Hotelsmodel.hpp"
-#include "Authmanager.hpp"
+#include "Models/Hotelsmodel.hpp"
+#include "Models/Authmanager.hpp"
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);

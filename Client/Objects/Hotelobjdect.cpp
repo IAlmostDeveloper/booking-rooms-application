@@ -5,11 +5,13 @@ HotelObject::HotelObject(QObject *parent) : QObject(parent)
 
 }
 
-HotelObject::HotelObject(const QString &name, const QString &address, int id, bool available)
+HotelObject::HotelObject(int id, const QString& name, const QString& address,
+                         const QString& description, bool available)
 {
+    setId(id);
     setName(name);
     setAddress(address);
-    setId(id);
+    setDescription(description);
     setAvailable(available);
 }
 
@@ -21,6 +23,11 @@ QString HotelObject::name()
 QString HotelObject::address()
 {
     return m_address;
+}
+
+QString HotelObject::description()
+{
+   return m_description;
 }
 
 int HotelObject::id()
@@ -43,6 +50,12 @@ void HotelObject::setAddress(const QString &value)
 {
     m_address = value;
     emit addressChanged(value);
+}
+
+void HotelObject::setDescription(const QString &value)
+{
+    m_description = value;
+    emit descriptionChanged(value);
 }
 
 void HotelObject::setId(int value)

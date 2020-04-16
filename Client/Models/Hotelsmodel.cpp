@@ -6,7 +6,7 @@
 #include <QNetworkReply>
 #include <QRegExp>
 #include "Authmanager.hpp"
-#include "Hotelobjdect.hpp"
+#include "Objects/Hotelobjdect.hpp"
 
 HotelsModel::HotelsModel(QObject *parent) : QObject(parent)
 {
@@ -26,16 +26,19 @@ void HotelsModel::getParsedHotelsList()
         else
         {
             QString document = reply->readAll();
+            qDebug() << document;
             QList<QObject*> hotelsList = QList<QObject*>();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
             for(auto i : raw)
             {
                 QStringList hotelRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
+                qDebug() << hotelRaw;
                 int id = hotelRaw[0].toInt();
                 QString name = hotelRaw[1].replace("\"", "");
-                bool available = hotelRaw[2].remove(" ")=="1" ? true : false;
-                QString address = hotelRaw[3].replace("\"", "").replace("]", "");
-                hotelsList.append(new HotelObject(name, address, id, available));
+                QString address = hotelRaw[2].replace("\"", "").replace("]", "");
+                QString description = hotelRaw[3].replace("\"", "").replace("]", "");
+                bool available = hotelRaw[4].remove(" ").remove("]")=="1" ? true : false;
+                hotelsList.append(new HotelObject(id, name, address, description, available));
             }
             emit hotelsDataReceived(hotelsList);
         }
@@ -43,7 +46,8 @@ void HotelsModel::getParsedHotelsList()
     });
 }
 
-void HotelsModel::addHotelToDatabase(const QString& name, const QString& address, bool available)
+void HotelsModel::addHotelToDatabase(const QString& name, const QString& address,
+                                     const QString& description, bool available)
 {
     QUrl url(QString("http://localhost:%1/add/hotel").arg(AuthManager::connectionPort()));
     QNetworkRequest request(url);
@@ -52,6 +56,7 @@ void HotelsModel::addHotelToDatabase(const QString& name, const QString& address
     body["sessionToken"] = AuthManager::currentToken();
     body["name"] = name;
     body["address"] = address;
+    body["description"] = description;
     body["available"] = available ? 1 : 0;
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
