@@ -32,9 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Hotelsmodel.hpp \
-    Hotelobjdect.hpp \
-    Authmanager.hpp \
     Models/Authmanager.hpp \
     Models/Hotelsmodel.hpp \
     Objects/Hotelobjdect.hpp
