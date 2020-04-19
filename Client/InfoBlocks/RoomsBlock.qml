@@ -6,6 +6,7 @@ import QtQuick.Dialogs 1.3
 import RoomsModel 1.0
 
 Item {
+    property string currentHotelName: ""
     id: roomsBlock
     width: parent.width
     height: parent.height
@@ -14,9 +15,8 @@ Item {
         tableModel.clear();
     }
     function getRoomsList(){
-        var hotelId = isNaN(parseInt(hotelIdField.text)) ? 0
-                      : parseInt(hotelIdField.text);
-        roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotelId);
+        var hotel = hotelNameField.text;
+        roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotel);
     }
 
     state: roomsBlock.width >= roomsBlock.height * 1.75 ? "Landscape" : "Portrait"
@@ -44,7 +44,7 @@ Item {
             for(var i=0;i<roomsData.length;i++){
                 tableModel.append({
                                   idText: roomsData[i].id,
-                                  hotelIdText: roomsData[i].hotelId,
+                                  hotelNameText: roomsData[i].hotel,
                                   descriptionText : roomsData[i].description,
                                   availableText: roomsData[i].available ? "Yes" : "No"});
             }
@@ -81,14 +81,17 @@ Item {
         }
 
         TextField{
-            id: hotelIdField
-            placeholderText: "hotel id"
+            id: hotelNameField
+            placeholderText: "hotel name"
+            text: currentHotelName
+            onTextChanged: {
+                getRoomsList();
+            }
 
         }
 
         Button {
             text: qsTr("Get rooms list")
-            enabled: !isNaN(hotelIdField.text)
             onClicked: {
                 getRoomsList();
             }
@@ -129,9 +132,9 @@ Item {
                         }
 
                         Text{
-                            id: hotelId
+                            id: hotel
                             width: parent.width / 4
-                            text: hotelIdText
+                            text: hotelNameText
                         }
 
                         Column{

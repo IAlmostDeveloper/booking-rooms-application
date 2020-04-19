@@ -9,8 +9,8 @@ class RoomsModel : public QObject
     Q_OBJECT
 public:
     explicit RoomsModel(QObject *parent = nullptr);
-    Q_INVOKABLE void getParsedRoomsList(bool isOnlyAvailable, int hotelId = 0);
-    Q_INVOKABLE void addRoomToDatabase(int hotelId,
+    Q_INVOKABLE void getParsedRoomsList(bool isOnlyAvailable, const QString& hotel = "");
+    Q_INVOKABLE void addRoomToDatabase(const QString& hotel,
                                        const QString& description, bool available);
 
 signals:

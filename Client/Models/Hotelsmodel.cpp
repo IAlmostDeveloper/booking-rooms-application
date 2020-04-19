@@ -32,9 +32,9 @@ void HotelsModel::getParsedHotelsList()
             {
                 QStringList hotelRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
                 int id = hotelRaw[0].toInt();
-                QString name = hotelRaw[1].replace("\"", "");
-                QString address = hotelRaw[2].replace("\"", "").replace("]", "");
-                QString description = hotelRaw[3].replace("\"", "").replace("]", "");
+                QString name = hotelRaw[1].remove("\"").remove(0,1);
+                QString address = hotelRaw[2].remove("\"").remove("]");
+                QString description = hotelRaw[3].remove("\"").remove("]");
                 bool available = hotelRaw[4].remove(" ").remove("]")=="1" ? true : false;
                 hotelsList.append(new HotelObject(id, name, address, description, available));
             }
