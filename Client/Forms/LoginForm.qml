@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import AuthManager 1.0
 
 Item{
+    signal successfulLogin();
     id: loginForm
     state: loginForm.width >= loginForm.height * 1.75 ? "Landscape" : "Portrait"
     states:[
@@ -77,12 +78,13 @@ Item{
                 Layout.alignment: Layout.Center
             }
         }
-    }
+
     AuthManager{
         id: authManager
         onAuthFinished:{
             console.log("Auth finished!");
             console.log(token);
+            successfulLogin();
         }
         onAuthFailed: {
             console.log("Auth failed!");
@@ -96,4 +98,5 @@ Item{
         signInLogin.clear();
         signInPassword.clear();
     }
+}
 }

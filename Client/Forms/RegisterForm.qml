@@ -6,6 +6,7 @@ import QtQuick.Layouts 1.3
 import AuthManager 1.0
 
 Item {
+    signal successfulRegistration();
     id:registrationForm
     state: registrationForm.width >= registrationForm.height * 1.5 ? "Landscape" : "Portrait"
     states:[
@@ -85,6 +86,7 @@ Item {
         id: regManager
         onRegFinished:{
             console.log("Reg finished!");
+            successfulRegistration();
         }
         onRegFailed: {
             console.log("Reg failed!");

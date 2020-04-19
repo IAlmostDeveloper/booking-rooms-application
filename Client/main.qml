@@ -10,7 +10,7 @@ Window {
     height: 480
     minimumWidth: 460
     minimumHeight: 420
-    title: qsTr("Authorization")
+    title: qsTr("Booking rooms app")
 
     property var applicationForms: {
         "SignIn": "Forms/LoginForm.qml",
@@ -28,6 +28,17 @@ Window {
             horizontalCenter: parent.horizontalCenter
         }
         source: applicationForms[bottomMenu.pressedButton]
+    }
+
+    Connections{
+        target: mainLoader.item
+        ignoreUnknownSignals: enabled
+        onSuccessfulLogin:{
+            bottomMenu.pressedButton = "Hotels";
+        }
+        onSuccessfulRegistration:{
+            bottomMenu.pressedButton = "SignIn";
+        }
     }
 
     BottomMenu{
