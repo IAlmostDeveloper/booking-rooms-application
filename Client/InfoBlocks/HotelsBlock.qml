@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.3
 import HotelsModel 1.0
 
 Item {
+    signal viewRoomsRequest(string hotelName)
     id: hotelsBlock
     width: parent.width
     height: parent.height
@@ -74,6 +75,7 @@ Item {
 
     ListView {
         id: hotelsListView
+        width: parent.width
         height: parent.height - fieldsLayout.height - getHotelsButton.height
         ScrollBar.vertical: ScrollBar{
 
@@ -85,11 +87,13 @@ Item {
         delegate:
             Item {
                 id: item
+                width: parent.width
                 anchors.left: parent.left
                 anchors.right: parent.right
                 height: 40
 
                 Rectangle{
+                    width: parent.width
                     anchors.fill: parent
                     color: "#ffff00"
 
@@ -100,24 +104,24 @@ Item {
 
                         Text{
                             id: name
-                            width: parent.width / 4
+                            width: parent.width / 6
                             text: nameText
                         }
 
                         Text{
                             id: address
-                            width: parent.width / 4
+                            width: parent.width / 6
                             text: addressText
                         }
 
                         Text{
                             id: description
-                            width: parent.width / 4
+                            width: parent.width / 5
                             text: descriptionText
                         }
 
                         Column{
-                            width: parent.width / 4
+                            width: parent.width / 6
                             spacing: 5
                             Text{
                                 id: id
@@ -126,6 +130,16 @@ Item {
                             Text{
                                 id: available
                                 text: "Available: " + availableText
+                            }
+                        }
+
+                        Button{
+                            id: viewHotelRoomsButton
+                            text: "View rooms"
+                            width: parent.width / 7
+                            onClicked: {
+                                console.log("view rooms");
+                                viewRoomsRequest(name.text);
                             }
                         }
                     }

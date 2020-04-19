@@ -40,4 +40,13 @@ Item {
         anchors.top: tabBar.bottom
         source: "qrc:/InfoBlocks/HotelsBlock.qml"
     }
+
+    Connections{
+        target: blockLoader.item
+        ignoreUnknownSignals: enabled
+        onViewRoomsRequest:{
+            blockLoader.source = "qrc:/InfoBlocks/RoomsBlock.qml";
+            target.currentHotelName = hotelName;
+        }
+    }
 }
