@@ -124,7 +124,7 @@ def addHotel(jsonresult):
 
 
 def addRoom(jsonresult):
-    DatabaseManager.addRoom(jsonresult["hotelId"],
+    DatabaseManager.addRoom(jsonresult["hotel"],
                             jsonresult["description"],
                             jsonresult["available"])
 

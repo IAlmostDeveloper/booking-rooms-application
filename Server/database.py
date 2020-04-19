@@ -19,7 +19,7 @@ class DatabaseManager:
             )""")
             cursor.execute("""create table rooms(
             id integer primary key,
-            hotelId integer,
+            hotel text,
             description text,
             available numeric        
             )""")
@@ -44,15 +44,15 @@ class DatabaseManager:
             rights text
             
             )""")
+            DatabaseManager.addHotel('Hotel1', 'Address1', 'Description1', 1)
+            DatabaseManager.addHotel('Hotel2', 'Address2', 'Description2', 1)
+            DatabaseManager.addHotel('Hotel3', 'Address3', 'Description3', 1)
+            DatabaseManager.addRoom('Hotel2', 'Simple room', 0)
+            DatabaseManager.addRoom('Hotel2', 'Cheap room', 1)
+            DatabaseManager.addRoom('Hotel3', 'Expensive room', 1)
+            DatabaseManager.addRoom('Hotel1', 'Another expensive room', 0)
+            DatabaseManager.addUser('admin', 'admin', 'admin')
         conn.commit()
-        DatabaseManager.addHotel('Hotel1', 'Address1', 'Description1', 1)
-        DatabaseManager.addHotel('Hotel2', 'Address2', 'Description2', 1)
-        DatabaseManager.addHotel('Hotel3', 'Address3', 'Description3', 1)
-        DatabaseManager.addRoom(2, 'Simple room', 0)
-        DatabaseManager.addRoom(1, 'Cheap room', 1)
-        DatabaseManager.addRoom(3, 'Expensive room', 1)
-        DatabaseManager.addRoom(3, 'Another expensive room', 0)
-        DatabaseManager.addUser('admin', 'admin', 'admin')
         return count
 
     @staticmethod
@@ -68,11 +68,11 @@ class DatabaseManager:
         conn.commit()
 
     @staticmethod
-    def addRoom(hotelId, description, available):
+    def addRoom(hotel, description, available):
         cursor.execute(
-            "insert into rooms(hotelId, description, available) "
-            "values ('{hotelId}', '{description}', '{available}')".format(
-                hotelId=hotelId,
+            "insert into rooms(hotel, description, available) "
+            "values ('{hotel}', '{description}', '{available}')".format(
+                hotel=hotel,
                 description=description,
                 available=available
             ))
@@ -135,14 +135,14 @@ class DatabaseManager:
         return cursor.fetchall()
 
     @classmethod
-    def getHotelRooms(cls, hotelId):
-        cursor.execute("select * from rooms where hotelId='{hotelId}'".format(hotelId=hotelId))
+    def getHotelRooms(cls, hotel):
+        cursor.execute("select * from rooms where hotel='{hotel}'".format(hotel=hotel))
         conn.commit()
         return cursor.fetchall()
 
     @classmethod
-    def getHotelAvailableRooms(cls, hotelId):
-        cursor.execute("select * from rooms where hotelId='{hotelId}' and available=1".format(hotelId=hotelId))
+    def getHotelAvailableRooms(cls, hotel):
+        cursor.execute("select * from rooms where hotel='{hotel}' and available=1".format(hotel=hotel))
         conn.commit()
         return cursor.fetchall()
 
