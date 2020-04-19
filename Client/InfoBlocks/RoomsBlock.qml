@@ -1,6 +1,8 @@
 import QtQuick 2.0
+import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import QtQuick.Dialogs 1.3
 import RoomsModel 1.0
 
 Item {
@@ -10,6 +12,11 @@ Item {
 
     function clearList(){
         tableModel.clear();
+    }
+    function getRoomsList(){
+        var hotelId = isNaN(parseInt(hotelIdField.text)) ? 0
+                      : parseInt(hotelIdField.text);
+        roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotelId);
     }
 
     state: roomsBlock.width >= roomsBlock.height * 1.75 ? "Landscape" : "Portrait"
@@ -50,9 +57,7 @@ Item {
 
         onAddRoomSuccess: {
             console.log("added successfully");
-            var hotelId = isNaN(parseInt(hotelIdField.text)) ? 0
-                          : parseInt(hotelIdField.text);
-            roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotelId);
+            getRoomsList();
 
         }
         onAddRoomError: {
@@ -70,6 +75,9 @@ Item {
         CheckBox{
             id: onlyAvailableCheckbox
             text: "Only available rooms"
+            onCheckStateChanged: {
+                getRoomsList();
+            }
         }
 
         TextField{
@@ -82,9 +90,7 @@ Item {
             text: qsTr("Get rooms list")
             enabled: !isNaN(hotelIdField.text)
             onClicked: {
-                var hotelId = isNaN(parseInt(hotelIdField.text)) ? 0
-                              : parseInt(hotelIdField.text);
-                roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotelId);
+                getRoomsList();
             }
         }
 
@@ -138,6 +144,14 @@ Item {
                             Text{
                                 id: available
                                 text: "Available: " + availableText
+                            }
+                        }
+                        Button{
+                            id: bookRoomButton
+                            width: parent.width / 5
+                            text: qsTr("Book")
+                            onClicked: {
+                                calendarDialog.open();
                             }
                         }
                     }
@@ -210,6 +224,19 @@ Item {
                                                  roomAvailableField.currentText=="Yes");
                 }
             }
+        }
+    }
+    Dialog{
+        id: calendarDialog
+        title: qsTr("Select date")
+        standardButtons: StandardButton.Cancel | StandardButton.Ok
+        Calendar{
+            id: calendar
+            minimumDate: new Date()
+            maximumDate: new Date(2020, 3, 23)
+        }
+        onAccepted: {
+            console.log(Qt.formatDate(calendar.selectedDate, "dd-MM-yy"));
         }
     }
 }
