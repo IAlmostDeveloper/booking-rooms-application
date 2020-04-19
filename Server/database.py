@@ -45,6 +45,14 @@ class DatabaseManager:
             
             )""")
         conn.commit()
+        DatabaseManager.addHotel('Hotel1', 'Address1', 'Description1', 1)
+        DatabaseManager.addHotel('Hotel2', 'Address2', 'Description2', 1)
+        DatabaseManager.addHotel('Hotel3', 'Address3', 'Description3', 1)
+        DatabaseManager.addRoom(2, 'Simple room', 0)
+        DatabaseManager.addRoom(1, 'Cheap room', 1)
+        DatabaseManager.addRoom(3, 'Expensive room', 1)
+        DatabaseManager.addRoom(3, 'Another expensive room', 0)
+        DatabaseManager.addUser('admin', 'admin', 'admin')
         return count
 
     @staticmethod
