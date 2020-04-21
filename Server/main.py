@@ -92,6 +92,35 @@ class requestHandler(BaseHTTPRequestHandler):
                     addClient(jsonresult)
                 if self.path.endswith('/user'):
                     addUser(jsonresult)
+
+            if self.path.split('/')[1] == 'delete':
+                if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
+                    self.send_response(200)
+                    if self.path.endswith('/hotel'):
+                        deleteHotel(jsonresult)
+                    if self.path.endswith('/room'):
+                        deleteRoom(jsonresult)
+                    if self.path.endswith('/rent'):
+                        deleteRent(jsonresult)
+                    if self.path.endswith('/client'):
+                        deleteClient(jsonresult)
+                    if self.path.endswith('/user'):
+                        deleteUser(jsonresult)
+
+            if self.path.split('/')[1] == 'update':
+                if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
+                    self.send_response(200)
+                    if self.path.endswith('/hotel'):
+                        updateHotel(jsonresult)
+                    if self.path.endswith('/room'):
+                        updateRoom(jsonresult)
+                    if self.path.endswith('/rent'):
+                        updateRent(jsonresult)
+                    if self.path.endswith('/client'):
+                        updateClient(jsonresult)
+                    if self.path.endswith('/user'):
+                        updateUser(jsonresult)
+
             else:
                 self.send_error(403)
             self.end_headers()
@@ -117,36 +146,70 @@ class requestHandler(BaseHTTPRequestHandler):
 
 
 def addHotel(jsonresult):
-    DatabaseManager.addHotel(jsonresult["name"],
-                             jsonresult["address"],
-                             jsonresult["description"],
-                             jsonresult["available"])
+    DatabaseManager.addHotel(jsonresult["name"], jsonresult["address"],
+                             jsonresult["description"], jsonresult["available"])
 
 
 def addRoom(jsonresult):
-    DatabaseManager.addRoom(jsonresult["hotel"],
-                            jsonresult["description"],
-                            jsonresult["available"])
+    DatabaseManager.addRoom(jsonresult["hotel"], jsonresult["description"], jsonresult["available"])
 
 
 def addRent(jsonresult):
-    DatabaseManager.addRent(jsonresult["roomId"],
-                            jsonresult["userId"],
-                            jsonresult["fromDate"],
-                            jsonresult["toDate"])
+    DatabaseManager.addRent(jsonresult["roomId"], jsonresult["userId"],
+                            jsonresult["fromDate"], jsonresult["toDate"])
 
 
 def addClient(jsonresult):
-    DatabaseManager.addClient(jsonresult["userId"],
-                              jsonresult["firstName"],
-                              jsonresult["lastName"],
-                              jsonresult["passport"])
+    DatabaseManager.addClient(jsonresult["userId"], jsonresult["firstName"],
+                              jsonresult["lastName"], jsonresult["passport"])
 
 
 def addUser(jsonresult):
-    DatabaseManager.addUser(jsonresult["login"],
-                            jsonresult["password"],
-                            jsonresult["rights"])
+    DatabaseManager.addUser(jsonresult["login"], jsonresult["password"], jsonresult["rights"])
+
+
+def deleteHotel(jsonresult):
+    DatabaseManager.deleteHotel(jsonresult["id"])
+
+
+def deleteRoom(jsonresult):
+    DatabaseManager.deleteRoom(jsonresult["id"])
+
+
+def deleteRent(jsonresult):
+    DatabaseManager.deleteRent(jsonresult["id"])
+
+
+def deleteClient(jsonresult):
+    DatabaseManager.deleteClient(jsonresult["id"])
+
+
+def deleteUser(jsonresult):
+    DatabaseManager.deleteUser(jsonresult["id"])
+
+
+def updateHotel(jsonresult):
+    DatabaseManager.updateHotel(jsonresult["id"], jsonresult["name"], jsonresult["address"],
+                                jsonresult["description"], jsonresult["available"])
+
+
+def updateRoom(jsonresult):
+    DatabaseManager.updateRoom(jsonresult["id"], jsonresult["hotel"],
+                               jsonresult["description"], jsonresult["available"])
+
+
+def updateRent(jsonresult):
+    DatabaseManager.updateRent(jsonresult["id"], jsonresult["roomId"], jsonresult["userId"],
+                               jsonresult["fromDate"], jsonresult["toDate"])
+
+
+def updateClient(jsonresult):
+    DatabaseManager.updateClient(jsonresult["id"], jsonresult["userId"], jsonresult["firstName"],
+                                 jsonresult["lastName"], jsonresult["passport"])
+
+
+def updateUser(jsonresult):
+    DatabaseManager.updateUser(jsonresult["id"], jsonresult["login"], jsonresult["password"], jsonresult["rights"])
 
 
 def registerUser(login, password, rights):
