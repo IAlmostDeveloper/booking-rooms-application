@@ -18,7 +18,10 @@ SOURCES += main.cpp \
     Models/Hotelsmodel.cpp \
     Objects/Hotelobjdect.cpp \
     Models/Roomsmodel.cpp \
-    Objects/Roomobject.cpp
+    Objects/Roomobject.cpp \
+    Userdata.cpp \
+    Models/Rentsmodel.cpp \
+    Objects/Rentobject.cpp
 
 RESOURCES += qml.qrc
 
@@ -38,7 +41,10 @@ HEADERS += \
     Models/Hotelsmodel.hpp \
     Objects/Hotelobjdect.hpp \
     Models/Roomsmodel.hpp \
-    Objects/Roomobject.hpp
+    Objects/Roomobject.hpp \
+    Userdata.hpp \
+    Models/Rentsmodel.hpp \
+    Objects/Rentobject.hpp
 
 DISTFILES += \
     Forms/LoginForm.qml \
