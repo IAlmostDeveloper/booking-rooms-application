@@ -16,6 +16,7 @@ AuthManager::AuthManager(QObject *parent) : QObject(parent)
 
 int AuthManager::m_connectionPort = 8080;
 QString AuthManager::m_currentToken;
+QString AuthManager::m_currentLogin;
 
 void AuthManager::auth(const QString &login, const QString &password){
     setAuthProcessing(true);
@@ -28,13 +29,14 @@ void AuthManager::auth(const QString &login, const QString &password){
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
 
-    connect(reply, &QNetworkReply::finished, [this, reply](){
+    connect(reply, &QNetworkReply::finished, [this, reply, login](){
         if(reply->error()!=QNetworkReply::NoError)
             emit authFailed(reply->errorString());
         else{
             QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
             QJsonValue tokenValue = document["token"];
             AuthManager::setCurrentToken(tokenValue.toString());
+            AuthManager::setCurrentLogin(login);
             emit authFinished(tokenValue.toString());
         }
         reply->deleteLater();
@@ -42,7 +44,8 @@ void AuthManager::auth(const QString &login, const QString &password){
     });
 }
 
-void AuthManager::reg(const QString &login, const QString &password)
+void AuthManager::reg(const QString& login, const QString& password, const QString& firstName,
+                      const QString& lastName, const QString& passport)
 {
     setRegProcessing(true);
     QUrl url(QString("http://localhost:%1/register").arg(AuthManager::connectionPort()));
@@ -51,6 +54,9 @@ void AuthManager::reg(const QString &login, const QString &password)
     QJsonObject body;
     body["login"] = login;
     body["password"] = password;
+    body["firstName"] = firstName;
+    body["lastName"] = lastName;
+    body["passport"] = passport;
     body["rights"] = "none";
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
@@ -108,4 +114,14 @@ QString AuthManager::currentToken()
 void AuthManager::setCurrentToken(const QString &token)
 {
     AuthManager::m_currentToken = token;
+}
+
+QString AuthManager::currentLogin()
+{
+    return AuthManager::m_currentLogin;
+}
+
+void AuthManager::setCurrentLogin(const QString &login)
+{
+    AuthManager::m_currentLogin = login;
 }

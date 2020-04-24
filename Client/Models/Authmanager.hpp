@@ -13,7 +13,8 @@ class AuthManager : public QObject
 public:
     explicit AuthManager(QObject *parent = nullptr);
     Q_INVOKABLE void auth(const QString& login, const QString& password);
-    Q_INVOKABLE void reg(const QString& login, const QString& password);
+    Q_INVOKABLE void reg(const QString& login, const QString& password, const QString& firstName,
+                         const QString& lastName, const QString& passport="");
     bool isAuthProcessing();
     void setAuthProcessing(bool value);
     bool isRegProcessing();
@@ -22,6 +23,8 @@ public:
     static void setConnectionPort(int port);
     static QString currentToken();
     static void setCurrentToken(const QString& token);
+    static QString currentLogin();
+    static void setCurrentLogin(const QString& token);
 
 signals:
     void regFinished();
@@ -39,6 +42,7 @@ private:
     bool m_isRegProcessing;
     static int m_connectionPort;
     static QString m_currentToken;
+    static QString m_currentLogin;
 };
 
 #endif // AUTHMANAGER_HPP
