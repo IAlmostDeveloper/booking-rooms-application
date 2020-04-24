@@ -64,16 +64,32 @@ Item {
             placeholderText: "Repeat password"
             echoMode: TextField.Password
          }
+         TextField{
+            id: signUpFirstName
+            placeholderText: "First name"
+         }
+         TextField{
+            id: signUpLastName
+            placeholderText: "Last name"
+         }
+         TextField{
+            id: signUpPassport
+            placeholderText: "Passport"
+         }
          Button{
              text: "Sign up"
              Layout.alignment: Layout.Center
              onClicked: {
-                regManager.reg(signUpLogin.text, signUpPassword.text);
+                regManager.reg(signUpLogin.text, signUpPassword.text,
+                               signUpFirstName.text, signUpLastName.text, signUpPassport.text);
                 clearFields();
              }
              enabled: signUpLogin.text.length >= 5
                       && signUpPassword.text.length >= 5
                       && signUpPassword.text === signUpRepeatPassword.text
+                      && signUpFirstName.text.length >= 2
+                      && signUpLastName.text.length >= 2
+                      && signUpPassport.text.length > 0
          }
          BusyIndicator{
             id: signUpProcessing

@@ -5,6 +5,10 @@ import QtQuick.Layouts 1.3
 import AuthManager 1.0
 
 Item{
+    function clearFields(){
+        signInLogin.clear();
+        signInPassword.clear();
+    }
     signal successfulLogin();
     id: loginForm
     state: loginForm.width >= loginForm.height * 1.75 ? "Landscape" : "Portrait"
@@ -92,11 +96,6 @@ Item{
             errorDialog.setInformativeText(error);
             errorDialog.open();
         }
-    }
-
-    function clearFields(){
-        signInLogin.clear();
-        signInPassword.clear();
     }
 }
 }
