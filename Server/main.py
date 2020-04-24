@@ -60,7 +60,7 @@ class requestHandler(BaseHTTPRequestHandler):
             if parsed[0] == 'user-rents':
                 if len(parsed) < 5 or parsed[3] != 'user':
                     return
-                rentsList = DatabaseManager.getRoomRents(parsed[4])
+                rentsList = DatabaseManager.getRentsByLogin(parsed[4])
                 self.wfile.write(json.dumps(rentsList).encode())
 
             if parsed[0] == 'clients':
@@ -93,40 +93,49 @@ class requestHandler(BaseHTTPRequestHandler):
                 if self.path.endswith('/user'):
                     addUser(jsonresult)
 
-            if self.path.split('/')[1] == 'delete':
-                if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
-                    self.send_response(200)
-                    if self.path.endswith('/hotel'):
-                        deleteHotel(jsonresult)
-                    if self.path.endswith('/room'):
-                        deleteRoom(jsonresult)
-                    if self.path.endswith('/rent'):
-                        deleteRent(jsonresult)
-                    if self.path.endswith('/client'):
-                        deleteClient(jsonresult)
-                    if self.path.endswith('/user'):
-                        deleteUser(jsonresult)
+                else:
+                    self.send_error(403)
+                self.end_headers()
 
-            if self.path.split('/')[1] == 'update':
-                if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
-                    self.send_response(200)
-                    if self.path.endswith('/hotel'):
-                        updateHotel(jsonresult)
-                    if self.path.endswith('/room'):
-                        updateRoom(jsonresult)
-                    if self.path.endswith('/rent'):
-                        updateRent(jsonresult)
-                    if self.path.endswith('/client'):
-                        updateClient(jsonresult)
-                    if self.path.endswith('/user'):
-                        updateUser(jsonresult)
+        if self.path.split('/')[1] == 'delete':
+            if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
+                self.send_response(200)
+                if self.path.endswith('/hotel'):
+                    deleteHotel(jsonresult)
+                if self.path.endswith('/room'):
+                    deleteRoom(jsonresult)
+                if self.path.endswith('/rent'):
+                    deleteRent(jsonresult)
+                if self.path.endswith('/client'):
+                    deleteClient(jsonresult)
+                if self.path.endswith('/user'):
+                    deleteUser(jsonresult)
+
+                else:
+                    self.send_error(403)
+                self.end_headers()
+
+        if self.path.split('/')[1] == 'update':
+            if adminSessionTokens.__contains__(jsonresult["sessionToken"]):
+                self.send_response(200)
+                if self.path.endswith('/hotel'):
+                    updateHotel(jsonresult)
+                if self.path.endswith('/room'):
+                    updateRoom(jsonresult)
+                if self.path.endswith('/rent'):
+                    updateRent(jsonresult)
+                if self.path.endswith('/client'):
+                    updateClient(jsonresult)
+                if self.path.endswith('/user'):
+                    updateUser(jsonresult)
 
             else:
                 self.send_error(403)
             self.end_headers()
 
         if self.path.endswith('/register'):
-            if registerUser(jsonresult['login'], jsonresult['password'], jsonresult['rights']) == 'ok':
+            if registerUser(jsonresult['login'], jsonresult['password'], jsonresult["firstName"],
+                            jsonresult["lastName"], jsonresult["passport"], jsonresult['rights']) == 'ok':
                 self.send_response(200)
             else:
                 self.send_error(400)
@@ -212,10 +221,12 @@ def updateUser(jsonresult):
     DatabaseManager.updateUser(jsonresult["id"], jsonresult["login"], jsonresult["password"], jsonresult["rights"])
 
 
-def registerUser(login, password, rights):
+def registerUser(login, password, firstName, lastName, passport, rights):
     if len(DatabaseManager.checkUser(login)) != 0:
         return "this login is already used"
     DatabaseManager.addUser(login, password, rights)
+    userId = DatabaseManager.getUserId(login)[0]
+    DatabaseManager.addClient(userId, firstName, lastName, passport)
     return "ok"
 
 
