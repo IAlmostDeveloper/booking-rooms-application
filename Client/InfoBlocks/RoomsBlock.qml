@@ -236,7 +236,7 @@ Item {
         Calendar{
             id: calendar
             minimumDate: new Date()
-            maximumDate: new Date(2020, 3, 23)
+            maximumDate: new Date(2020, 4, 31)
         }
         onAccepted: {
             console.log(Qt.formatDate(calendar.selectedDate, "dd-MM-yy"));
