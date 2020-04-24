@@ -4,6 +4,8 @@
 #include "Models/Authmanager.hpp"
 #include "Models/Hotelsmodel.hpp"
 #include "Models/Roomsmodel.hpp"
+#include "Models/Rentsmodel.hpp"
+#include "Userdata.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -11,6 +13,8 @@ int main(int argc, char *argv[])
     qmlRegisterType<AuthManager>("AuthManager", 1, 0, "AuthManager");
     qmlRegisterType<HotelsModel>("HotelsModel", 1, 0, "HotelsModel");
     qmlRegisterType<RoomsModel>("RoomsModel", 1, 0, "RoomsModel");
+    qmlRegisterType<RentsModel>("RentsModel", 1, 0, "RentsModel");
+    qmlRegisterType<UserData>("UserData", 1, 0, "UserData");
 
     QGuiApplication app(argc, argv);
 
