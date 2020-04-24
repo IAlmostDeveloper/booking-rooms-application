@@ -1,6 +1,17 @@
 #include "Userdata.hpp"
+#include "Models/Authmanager.hpp"
 
-Userdata::Userdata(QObject *parent) : QObject(parent)
+UserData::UserData(QObject *parent) : QObject(parent)
 {
 
+}
+
+QString UserData::getCurrentToken()
+{
+    return AuthManager::currentToken();
+}
+
+QString UserData::getCurrentLogin()
+{
+    return AuthManager::currentLogin();
 }

@@ -3,15 +3,13 @@
 
 #include <QObject>
 
-class Userdata : public QObject
+class UserData : public QObject
 {
     Q_OBJECT
 public:
-    explicit Userdata(QObject *parent = nullptr);
-
-signals:
-
-public slots:
+    explicit UserData(QObject *parent = nullptr);
+    Q_INVOKABLE QString getCurrentToken();
+    Q_INVOKABLE QString getCurrentLogin();
 };
 
 #endif // USERDATA_HPP
