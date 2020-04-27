@@ -17,9 +17,11 @@ public:
                                         const QString& description, bool available);
     HotelsModel* hotelsModel();
     void setHotelsModel(HotelsModel* hotelsModel);
+    void setNewHotelsModel();
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
 
 signals:
+    void clearHotelsModel();
     void hotelsModelChanged();
     void hotelsDataReceived();
     void hotelsDataReceiveError(const QString& error);

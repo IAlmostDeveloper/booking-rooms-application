@@ -8,7 +8,10 @@ App::App(QObject *parent)
     setAuthManager(new AuthManager());
     setHotelsManager(new HotelsManager(m_session));
     QObject::connect(m_authManager, &AuthManager::authFinished, this, &App::createSession);
-    QObject::connect(m_authManager, &AuthManager::authFinished, m_hotelsManager, &HotelsManager::setNewSession);
+    QObject::connect(m_authManager, &AuthManager::authFinished,
+                     m_hotelsManager, &HotelsManager::setNewSession);
+    QObject::connect(m_hotelsManager, &HotelsManager::clearHotelsModel,
+                     m_hotelsManager, &HotelsManager::setNewHotelsModel);
 }
 
 AuthManager* App::authManager()

@@ -24,7 +24,9 @@ void HotelsManager::getParsedHotelsList()
             emit hotelsDataReceiveError(reply->errorString());
         else
         {
-            m_hotelsModel->clear();
+            qDebug() << "About to emit";
+            emit clearHotelsModel();
+            qDebug() << "Emitted";
             QString document = reply->readAll();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
             for(auto i : raw)
@@ -76,7 +78,14 @@ HotelsModel *HotelsManager::hotelsModel()
 
 void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
 {
-    m_hotelsModel = hotelsModel;
+//    m_hotelsModel = hotelsModel;
+    m_hotelsModel = new HotelsModel();
+    emit hotelsModelChanged();
+}
+void HotelsManager::setNewHotelsModel()
+{
+    m_hotelsModel = new HotelsModel();
+    emit hotelsModelChanged();
 }
 
 void HotelsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

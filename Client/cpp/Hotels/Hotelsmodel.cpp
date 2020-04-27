@@ -22,15 +22,20 @@ QVariant HotelsModel::data(const QModelIndex &index, int role) const
 
 void HotelsModel::append(HotelObject *hotel)
 {
-    beginInsertRows(QModelIndex(), 0,0);
+    beginInsertRows(QModelIndex(), m_hotels.count(), m_hotels.count());
     m_hotels.append(hotel);
     endInsertRows();
 }
 
 void HotelsModel::clear()
 {
-    beginResetModel();
-    for(int i=0;i<rowCount(QModelIndex());i++)
+//    beginResetModel();
+//    m_hotels.clear();
+//    endResetModel();
+    beginRemoveRows(QModelIndex(), 0, m_hotels.count());
+    for(int i=0;i<m_hotels.count();i++){
         removeRow(i);
-    endResetModel();
+        m_hotels[i]->deleteLater();
+    }
+    endRemoveRows();
 }

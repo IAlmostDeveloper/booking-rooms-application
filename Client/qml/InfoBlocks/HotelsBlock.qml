@@ -31,6 +31,10 @@ Item {
     Connections{
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
+        onHotelsModelChanged:{
+            hotelsListView.model = App.hotelsManager.hotelsModel;
+        }
+
         onHotelsDataReceived: {
             console.log("hotels received");
         }
