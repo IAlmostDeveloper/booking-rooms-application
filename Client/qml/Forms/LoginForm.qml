@@ -2,13 +2,13 @@ import QtQuick 2.14
 import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Layouts 1.3
-import AuthManager 1.0
-
+import App 1.0
 Item{
     function clearFields(){
         signInLogin.clear();
         signInPassword.clear();
     }
+
     signal successfulLogin();
     id: loginForm
     state: loginForm.width >= loginForm.height * 1.75 ? "Landscape" : "Portrait"
@@ -70,7 +70,7 @@ Item{
                  text: "Sign in"
                  Layout.alignment: Layout.Center
                  onClicked: {
-                     authManager.auth(signInLogin.text, signInPassword.text);
+                     App.authManager.auth(signInLogin.text, signInPassword.text);
                      clearFields();
                  }
                  enabled: signInLogin.text.length >= 5 && signInPassword.text.length >= 5
@@ -78,24 +78,25 @@ Item{
 
              BusyIndicator{
                 id: loginProcessing
-                visible: authManager.isAuthProcessing
+                visible: App.authManager.isAuthProcessing
                 Layout.alignment: Layout.Center
             }
         }
 
-    AuthManager{
-        id: authManager
-        onAuthFinished:{
-            console.log("Auth finished!");
-            console.log(token);
-            successfulLogin();
-        }
-        onAuthFailed: {
-            console.log("Auth failed!");
-            console.log(error);
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
+        Connections{
+            target: App.authManager
+            ignoreUnknownSignals: enabled
+            onAuthFinished:{
+                console.log("Auth finished!");
+                console.log(token);
+                successfulLogin();
+            }
+            onAuthFailed: {
+                console.log("Auth failed!");
+                console.log(error);
+                errorDialog.setInformativeText(error);
+                errorDialog.open();
+            }
         }
     }
-}
 }

@@ -1,22 +1,24 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "Models/Authmanager.hpp"
-#include "Models/Hotelsmodel.hpp"
-#include "Models/Roomsmodel.hpp"
-#include "Models/Rentsmodel.hpp"
-#include "Userdata.hpp"
+#include <cpp/App.hpp>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    qmlRegisterType<AuthManager>("AuthManager", 1, 0, "AuthManager");
-    qmlRegisterType<HotelsModel>("HotelsModel", 1, 0, "HotelsModel");
-    qmlRegisterType<RoomsModel>("RoomsModel", 1, 0, "RoomsModel");
-    qmlRegisterType<RentsModel>("RentsModel", 1, 0, "RentsModel");
-    qmlRegisterType<UserData>("UserData", 1, 0, "UserData");
 
     QGuiApplication app(argc, argv);
+    qmlRegisterUncreatableType<HotelObject>("Hotel", 1, 0, "HotelObject", "interface");
+    qmlRegisterUncreatableType<RoomObject>("Room", 1, 0, "RoomObject", "interface");
+    qmlRegisterType<HotelsModel>("Hotel", 1, 0, "HotelsModel");
+    qmlRegisterType<RoomsModel>("Room", 1, 0, "RoomsModel");
+    qmlRegisterSingletonType<App>("App", 1, 0, "App", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
+        Q_UNUSED(engine)
+        Q_UNUSED(scriptEngine)
+
+        static App* application = new App();
+        return application;
+    });
 
     QQmlApplicationEngine engine;
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

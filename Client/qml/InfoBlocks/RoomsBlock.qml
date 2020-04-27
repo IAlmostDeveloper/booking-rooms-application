@@ -3,7 +3,8 @@ import QtQuick.Controls 1.4
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
-import RoomsModel 1.0
+import Room 1.0
+import App 1.0
 
 Item {
     property string currentHotelName: ""
@@ -16,7 +17,7 @@ Item {
     }
     function getRoomsList(){
         var hotel = hotelNameField.text;
-        roomsModel.getParsedRoomsList(onlyAvailableCheckbox.checked, hotel);
+        App.roomsManager.getParsedRoomsList(onlyAvailableCheckbox.checked, hotel);
     }
 
     state: roomsBlock.width >= roomsBlock.height * 1.75 ? "Landscape" : "Portrait"
@@ -37,34 +38,38 @@ Item {
         }
     ]
 
-    RoomsModel{
-        id: roomsModel
-        onRoomsDataReceived: {
-            clearList();
-            for(var i=0;i<roomsData.length;i++){
-                tableModel.append({
-                                  idText: roomsData[i].id,
-                                  hotelNameText: roomsData[i].hotel,
-                                  descriptionText : roomsData[i].description,
-                                  availableText: roomsData[i].available ? "Yes" : "No"});
-            }
-        }
-
-        onRoomsDataReceiveError: {
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
-        }
-
-        onAddRoomSuccess: {
-            console.log("added successfully");
-            getRoomsList();
-
-        }
-        onAddRoomError: {
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
-        }
+    Connections{
+        target: App.roomsManager
     }
+
+//    RoomsModel{
+//        id: roomsModel
+//        onRoomsDataReceived: {
+//            clearList();
+//            for(var i=0;i<roomsData.length;i++){
+//                tableModel.append({
+//                                  idText: roomsData[i].id,
+//                                  hotelNameText: roomsData[i].hotel,
+//                                  descriptionText : roomsData[i].description,
+//                                  availableText: roomsData[i].available ? "Yes" : "No"});
+//            }
+//        }
+
+//        onRoomsDataReceiveError: {
+//            errorDialog.setInformativeText(error);
+//            errorDialog.open();
+//        }
+
+//        onAddRoomSuccess: {
+//            console.log("added successfully");
+//            getRoomsList();
+
+//        }
+//        onAddRoomError: {
+//            errorDialog.setInformativeText(error);
+//            errorDialog.open();
+//        }
+//    }
 
     Row{
         id: roomParametersRow

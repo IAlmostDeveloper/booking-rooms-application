@@ -1,13 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>BottomMenu.qml</file>
-        <file>BottomMenuButton.qml</file>
-        <file>Forms/LoginForm.qml</file>
-        <file>Forms/MainForm.qml</file>
-        <file>Forms/RegisterForm.qml</file>
-        <file>InfoBlocks/HotelsBlock.qml</file>
-        <file>InfoBlocks/RoomsBlock.qml</file>
-        <file>InfoBlocks/RentsBlock.qml</file>
+        <file>qml/Forms/LoginForm.qml</file>
+        <file>qml/Forms/MainForm.qml</file>
+        <file>qml/Forms/RegisterForm.qml</file>
+        <file>qml/InfoBlocks/HotelsBlock.qml</file>
+        <file>qml/InfoBlocks/RentsBlock.qml</file>
+        <file>qml/InfoBlocks/RoomsBlock.qml</file>
+        <file>qml/BottomMenu.qml</file>
+        <file>qml/BottomMenuButton.qml</file>
     </qresource>
 </RCC>

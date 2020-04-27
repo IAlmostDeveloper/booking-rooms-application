@@ -2,7 +2,7 @@ import QtQuick 2.14
 import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.1
-
+import "qml"
 Window {
     id: root
     visible: true
@@ -13,9 +13,9 @@ Window {
     title: qsTr("Booking rooms app")
 
     property var applicationForms: {
-        "SignIn": "Forms/LoginForm.qml",
-        "SignUp" : "Forms/RegisterForm.qml",
-        "Hotels" : "Forms/MainForm.qml"
+        "SignIn": "qml/Forms/LoginForm.qml",
+        "SignUp" : "qml/Forms/RegisterForm.qml",
+        "Hotels" : "qml/Forms/MainForm.qml"
     }
 
     Loader{

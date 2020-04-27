@@ -1,29 +1,27 @@
-#include "Rentsmodel.hpp"
-#include "../Objects/Rentobject.hpp"
-#include "Authmanager.hpp"
+#include "RentsManager.hpp"
+#include "Rentobject.hpp"
+#include "../Auth/Authmanager.hpp"
 #include <QNetworkReply>
-#include "Objects/Roomobject.hpp"
 #include <QJsonDocument>
 #include <QJsonObject>
 
-RentsModel::RentsModel(QObject *parent) : QObject(parent)
+RentsManager::RentsManager(Session *session)
 {
-
+    m_currentSession = session;
 }
 
-void RentsModel::getUserRents(const QString &login)
+void RentsManager::getUserRents(const QString &login)
 {
-    QString port = QString::number(AuthManager::connectionPort());
-    QString token = AuthManager::currentToken();
+    QString port = QString::number(8080);
     QString uri = "user-rents";
     QString user = QString("&user=%1").arg(login);
 
     QString str = QString("http://localhost:%1/%2?token=%3%4")
-            .arg(port, uri, token, user);
+            .arg(port, uri, "123", user);
     QUrl url(str);
     QNetworkRequest request(url);
     QNetworkReply *reply = m_net.get(request);
-    connect(reply, &QNetworkReply::finished, [this, reply](){
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit rentsDataReceiveError(reply->errorString());
         else
@@ -41,8 +39,8 @@ void RentsModel::getUserRents(const QString &login)
                     int id = roomRaw[0].toInt();
                     int roomId = roomRaw[1].toInt();
                     int userId = roomRaw[2].toInt();
-                    QString fromDate = roomRaw[3];
-                    QString toDate = roomRaw[4];
+                    QString fromDate = roomRaw[3].remove("\"");
+                    QString toDate = roomRaw[4].remove("\"");
                     roomsList.append(new RentObject(id, roomId, userId, fromDate, toDate));
                 }
             emit rentsDataReceived(roomsList);

@@ -8,19 +8,15 @@
 #include <QDebug>
 #include <QString>
 
-AuthManager::AuthManager(QObject *parent) : QObject(parent)
+AuthManager::AuthManager()
 {
     m_isAuthProcessing = false;
     m_isRegProcessing = false;
 }
 
-int AuthManager::m_connectionPort = 8080;
-QString AuthManager::m_currentToken;
-QString AuthManager::m_currentLogin;
-
 void AuthManager::auth(const QString &login, const QString &password){
     setAuthProcessing(true);
-    QUrl url(QString("http://localhost:%1/auth").arg(AuthManager::connectionPort()));
+    QUrl url("http://localhost:8080/auth");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
@@ -29,15 +25,17 @@ void AuthManager::auth(const QString &login, const QString &password){
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
 
-    connect(reply, &QNetworkReply::finished, [this, reply, login](){
-        if(reply->error()!=QNetworkReply::NoError)
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        qDebug() << "lambda";
+        if(reply->error()!=QNetworkReply::NoError){
+            qDebug() << reply->errorString();
             emit authFailed(reply->errorString());
+        }
         else{
             QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
-            QJsonValue tokenValue = document["token"];
-            AuthManager::setCurrentToken(tokenValue.toString());
-            AuthManager::setCurrentLogin(login);
-            emit authFinished(tokenValue.toString());
+            emit authFinished(document["token"].toString(),
+                    document["login"].toString(),document["isAdmin"].toBool());
+            qDebug() << "signal emit success";
         }
         reply->deleteLater();
         setAuthProcessing(false);
@@ -48,7 +46,7 @@ void AuthManager::reg(const QString& login, const QString& password, const QStri
                       const QString& lastName, const QString& passport)
 {
     setRegProcessing(true);
-    QUrl url(QString("http://localhost:%1/register").arg(AuthManager::connectionPort()));
+    QUrl url(QString("http://localhost:%1/register").arg(8080));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
@@ -60,7 +58,7 @@ void AuthManager::reg(const QString& login, const QString& password, const QStri
     body["rights"] = "none";
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
-    connect(reply, &QNetworkReply::finished, [this, reply](){
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit regFailed(reply->errorString());
         else
@@ -94,34 +92,4 @@ void AuthManager::setRegProcessing(bool value)
         return;
     m_isRegProcessing=value;
     emit regProcessingChanged(value);
-}
-
-int AuthManager::connectionPort()
-{
-    return AuthManager::m_connectionPort;
-}
-
-void AuthManager::setConnectionPort(int port)
-{
-    AuthManager::m_connectionPort = port;
-}
-
-QString AuthManager::currentToken()
-{
-    return AuthManager::m_currentToken;
-}
-
-void AuthManager::setCurrentToken(const QString &token)
-{
-    AuthManager::m_currentToken = token;
-}
-
-QString AuthManager::currentLogin()
-{
-    return AuthManager::m_currentLogin;
-}
-
-void AuthManager::setCurrentLogin(const QString &login)
-{
-    AuthManager::m_currentLogin = login;
 }

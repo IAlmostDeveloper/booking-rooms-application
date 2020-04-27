@@ -1,14 +1,16 @@
-#ifndef RENTSMODEL_HPP
-#define RENTSMODEL_HPP
+#ifndef RENTSMANAGER_HPP
+#define RENTSMANAGER_HPP
 
 #include <QObject>
 #include <QNetworkAccessManager>
+#include "Rentsmodel.hpp"
+#include "../Session.hpp"
 
-class RentsModel : public QObject
+class RentsManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit RentsModel(QObject *parent = nullptr);
+    explicit RentsManager(Session* session = nullptr);
     Q_INVOKABLE void getUserRents(const QString& login);
 
 signals:
@@ -17,8 +19,9 @@ signals:
     void addRentSuccess();
     void addRentError(const QString& error);
 private:
-    QList<QObject*> m_rents;
     QNetworkAccessManager m_net;
+    Session* m_currentSession;
+    RentsModel* m_rentsModel;
 };
 
-#endif // RENTSMODEL_HPP
+#endif // RENTSMANAGER_HPP

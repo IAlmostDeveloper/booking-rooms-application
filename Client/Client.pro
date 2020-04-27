@@ -13,15 +13,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += main.cpp \
-    Models/Authmanager.cpp \
-    Models/Hotelsmodel.cpp \
-    Objects/Hotelobjdect.cpp \
-    Models/Roomsmodel.cpp \
-    Objects/Roomobject.cpp \
-    Userdata.cpp \
-    Models/Rentsmodel.cpp \
-    Objects/Rentobject.cpp
+SOURCES += cpp/Auth/Authmanager.cpp \
+    cpp/Hotels/Hotelobjdect.cpp \
+    cpp/Hotels/HotelsManager.cpp \
+    cpp/Rents/Rentobject.cpp \
+    cpp/Rents/RentsManager.cpp \
+    cpp/Rooms/Roomobject.cpp \
+    cpp/Rooms/RoomsManager.cpp \
+    cpp/App.cpp \
+    cpp/Session.cpp \
+    main.cpp \
+    cpp/Rents/Rentsmodel.cpp \
+    cpp/Rooms/Roomsmodel.cpp \
+    cpp/Hotels/Hotelsmodel.cpp
 
 RESOURCES += qml.qrc
 
@@ -37,14 +41,18 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Models/Authmanager.hpp \
-    Models/Hotelsmodel.hpp \
-    Objects/Hotelobjdect.hpp \
-    Models/Roomsmodel.hpp \
-    Objects/Roomobject.hpp \
-    Userdata.hpp \
-    Models/Rentsmodel.hpp \
-    Objects/Rentobject.hpp
+    cpp/Auth/Authmanager.hpp \
+    cpp/Hotels/Hotelobjdect.hpp \
+    cpp/Hotels/HotelsManager.hpp \
+    cpp/Rents/Rentobject.hpp \
+    cpp/Rents/RentsManager.hpp \
+    cpp/Rooms/Roomobject.hpp \
+    cpp/Rooms/RoomsManager.hpp \
+    cpp/App.hpp \
+    cpp/Session.hpp \
+    cpp/Rents/Rentsmodel.hpp \
+    cpp/Rooms/Roomsmodel.hpp \
+    cpp/Hotels/Hotelsmodel.hpp
 
 DISTFILES += \
     Forms/LoginForm.qml \

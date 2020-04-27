@@ -1,7 +1,6 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import HotelsModel 1.0
 
 Item {
     id: mainForm
@@ -14,21 +13,21 @@ Item {
         TabButton{
             text: "Hotels"
             onClicked: {
-                blockLoader.source = "qrc:/InfoBlocks/HotelsBlock.qml"
+                blockLoader.source = "qrc:/qml/InfoBlocks/HotelsBlock.qml"
             }
         }
 
         TabButton{
             text: "Rooms"
             onClicked: {
-                blockLoader.source = "qrc:/InfoBlocks/RoomsBlock.qml"
+                blockLoader.source = "qrc:/qml/InfoBlocks/RoomsBlock.qml"
             }
         }
 
         TabButton{
             text: "Rents"
             onClicked: {
-                blockLoader.source = "qrc:/InfoBlocks/RentsBlock.qml"
+                blockLoader.source = "qrc:/qml/InfoBlocks/RentsBlock.qml"
             }
         }
     }
@@ -38,14 +37,14 @@ Item {
         width: parent.width
         height: parent.height - tabBar.height - 20
         anchors.top: tabBar.bottom
-        source: "qrc:/InfoBlocks/HotelsBlock.qml"
+        source: "qrc:/qml/InfoBlocks/HotelsBlock.qml"
     }
 
     Connections{
         target: blockLoader.item
         ignoreUnknownSignals: enabled
         onViewRoomsRequest:{
-            blockLoader.source = "qrc:/InfoBlocks/RoomsBlock.qml";
+            blockLoader.source = "qrc:/qml/InfoBlocks/RoomsBlock.qml";
             target.currentHotelName = hotelName;
         }
     }

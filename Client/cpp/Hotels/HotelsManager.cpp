@@ -1,32 +1,31 @@
-#include "Hotelsmodel.hpp"
+#include "HotelsManager.hpp"
 #include <QUrl>
 #include <QNetworkRequest>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QNetworkReply>
 #include <QRegExp>
-#include "Authmanager.hpp"
-#include "Objects/Hotelobjdect.hpp"
 
-HotelsModel::HotelsModel(QObject *parent) : QObject(parent)
+HotelsManager::HotelsManager(Session *session)
 {
-
+    m_currentSession = session;
+    setHotelsModel(new HotelsModel());
 }
 
-void HotelsModel::getParsedHotelsList()
+void HotelsManager::getParsedHotelsList()
 {
-    QString str = QString("http://localhost:%1/hotels?token=%2")
-            .arg(QString::number(AuthManager::connectionPort()), AuthManager::currentToken());
+    QString str = QString("http://localhost:8080/hotels?token=%1")
+            .arg(m_currentSession->currentToken());
     QUrl url(str);
     QNetworkRequest request(url);
     QNetworkReply *reply = m_net.get(request);
-    connect(reply, &QNetworkReply::finished, [this, reply](){
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit hotelsDataReceiveError(reply->errorString());
         else
         {
+            m_hotelsModel->clear();
             QString document = reply->readAll();
-            QList<QObject*> hotelsList = QList<QObject*>();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
             for(auto i : raw)
             {
@@ -36,22 +35,22 @@ void HotelsModel::getParsedHotelsList()
                 QString address = hotelRaw[2].remove("\"").remove("]");
                 QString description = hotelRaw[3].remove("\"").remove("]");
                 bool available = hotelRaw[4].remove(" ").remove("]")=="1" ? true : false;
-                hotelsList.append(new HotelObject(id, name, address, description, available));
+                m_hotelsModel->append(new HotelObject(id, name, address, description, available));
             }
-            emit hotelsDataReceived(hotelsList);
+            emit hotelsDataReceived();
         }
         reply->deleteLater();
     });
 }
 
-void HotelsModel::addHotelToDatabase(const QString& name, const QString& address,
+void HotelsManager::addHotelToDatabase(const QString& name, const QString& address,
                                      const QString& description, bool available)
 {
-    QUrl url(QString("http://localhost:%1/add/hotel").arg(AuthManager::connectionPort()));
+    QUrl url(QString("http://localhost:%1/add/hotel").arg(8080));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = AuthManager::currentToken();
+    body["sessionToken"] = 123;
     body["name"] = name;
     body["address"] = address;
     body["description"] = description;
@@ -59,7 +58,7 @@ void HotelsModel::addHotelToDatabase(const QString& name, const QString& address
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
 
-    connect(reply, &QNetworkReply::finished, [this, reply](){
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit addHotelError(reply->errorString());
         else{
@@ -68,4 +67,19 @@ void HotelsModel::addHotelToDatabase(const QString& name, const QString& address
         }
         reply->deleteLater();
     });
+}
+
+HotelsModel *HotelsManager::hotelsModel()
+{
+    return m_hotelsModel;
+}
+
+void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
+{
+    m_hotelsModel = hotelsModel;
+}
+
+void HotelsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)
+{
+    m_currentSession = new Session(token, login, isAdmin);
 }

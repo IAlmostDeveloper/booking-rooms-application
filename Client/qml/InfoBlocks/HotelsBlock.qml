@@ -1,17 +1,14 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
-import HotelsModel 1.0
+import App 1.0
+import Hotel 1.0
 
 Item {
     signal viewRoomsRequest(string hotelName)
     id: hotelsBlock
     width: parent.width
     height: parent.height
-
-    function clearList(){
-        tableModel.clear();
-    }
 
     state: hotelsBlock.width >= hotelsBlock.height * 1.75 ? "Landscape" : "Portrait"
     states:[
@@ -31,18 +28,11 @@ Item {
         }
     ]
 
-    HotelsModel{
-        id: hotelsModel
+    Connections{
+        target: App.hotelsManager
+        ignoreUnknownSignals: enabled
         onHotelsDataReceived: {
-            clearList();
-            for(var i=0;i<hotelsData.length;i++){
-                tableModel.append({
-                                  idText: hotelsData[i].id,
-                                  nameText: hotelsData[i].name,
-                                  addressText: hotelsData[i].address,
-                                  descriptionText : hotelsData[i].description,
-                                  availableText: hotelsData[i].available ? "Yes" : "No"});
-            }
+            console.log("hotels received");
         }
 
         onHotelsDataReceiveError: {
@@ -69,7 +59,7 @@ Item {
         height: 50
 
         onClicked: {
-            hotelsModel.getParsedHotelsList();
+            App.hotelsManager.getParsedHotelsList();
         }
     }
 
@@ -84,8 +74,8 @@ Item {
         anchors.top: getHotelsButton.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        delegate:
-            Item {
+        delegate: Item {
+            property HotelObject hotel : App.hotelsManager.hotelsModel.getHotel(index)
                 id: item
                 width: parent.width
                 anchors.left: parent.left
@@ -105,19 +95,19 @@ Item {
                         Text{
                             id: name
                             width: parent.width / 6
-                            text: nameText
+                            text: hotel.name
                         }
 
                         Text{
                             id: address
                             width: parent.width / 6
-                            text: addressText
+                            text: hotel.address
                         }
 
                         Text{
                             id: description
                             width: parent.width / 5
-                            text: descriptionText
+                            text: hotel.description
                         }
 
                         Column{
@@ -125,11 +115,11 @@ Item {
                             spacing: 5
                             Text{
                                 id: id
-                                text: "Id: " + idText
+                                text: "Id: " + hotel.id
                             }
                             Text{
                                 id: available
-                                text: "Available: " + availableText
+                                text: "Available: " + hotel.available
                             }
                         }
 
@@ -146,9 +136,7 @@ Item {
                 }
         }
 
-        model: ListModel {
-            id: tableModel
-        }
+        model: App.hotelsManager.hotelsModel
     }
 
     GridLayout{

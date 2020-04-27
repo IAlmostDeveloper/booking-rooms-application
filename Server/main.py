@@ -150,7 +150,9 @@ class requestHandler(BaseHTTPRequestHandler):
                 self.send_error(400)
             self.end_headers()
             self.wfile.write(json.dumps({
-                'token': token
+                'token': token,
+                'login': jsonresult['login'],
+                'isAdmin': adminSessionTokens.__contains__(token)
             }).encode())
 
 

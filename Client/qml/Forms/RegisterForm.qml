@@ -3,7 +3,7 @@ import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.1
 import QtQuick.Layouts 1.3
-import AuthManager 1.0
+import App 1.0
 
 Item {
     signal successfulRegistration();
@@ -80,7 +80,7 @@ Item {
              text: "Sign up"
              Layout.alignment: Layout.Center
              onClicked: {
-                regManager.reg(signUpLogin.text, signUpPassword.text,
+                App.authManager.reg(signUpLogin.text, signUpPassword.text,
                                signUpFirstName.text, signUpLastName.text, signUpPassport.text);
                 clearFields();
              }
@@ -93,23 +93,25 @@ Item {
          }
          BusyIndicator{
             id: signUpProcessing
-            visible: regManager.isRegProcessing
+            visible: App.authManager.isRegProcessing
             Layout.alignment: Layout.Center
             }
         }
-    }
-    AuthManager{
-        id: regManager
-        onRegFinished:{
-            console.log("Reg finished!");
-            successfulRegistration();
-        }
-        onRegFailed: {
-            console.log("Reg failed!");
-            console.log(error);
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
-        }
+
+     Connections{
+         target: App.authManager
+         ignoreUnknownSignals: enabled
+         onRegFinished:{
+             console.log("Reg finished!");
+             successfulRegistration();
+         }
+         onRegFailed: {
+             console.log("Reg failed!");
+             console.log(error);
+             errorDialog.setInformativeText(error);
+             errorDialog.open();
+         }
+     }
     }
 
     function clearFields(){
