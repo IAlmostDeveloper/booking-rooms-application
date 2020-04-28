@@ -1,11 +1,28 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import App 1.0
+import Rent 1.0
 
 Item {
+    Connections{
+        target: App.rentsManager
+        ignoreUnknownSignals: enabled
+        onRentsModelChanged:{
+            rentsListView.model = App.rentsManager.rentsModel;
+        }
+
+        onRentsDataReceived: {
+            console.log("rents received");
+        }
+        onRentsDataReceiveError: {
+            console.log("rents receive failed");
+        }
+    }
+
     Text{
         id: userNameText
         Component.onCompleted: {
-            text = "Hello, " + userData.getCurrentLogin();
+            text = "Hello, " + App.session.login;
         }
     }
 
@@ -18,37 +35,15 @@ Item {
     Button{
         id: getRentsButton
         anchors.top: rentsBlockText.bottom
+        text: "Get my rents"
         onClicked: {
-            rentsModel.getUserRents(userData.getCurrentLogin());
+            App.rentsManager.getUserRents(App.session.login);
         }
     }
 
-//    RentsModel{
-//        id: rentsModel
-//        onRentsDataReceived: {
-//            console.log("received!");
-//            for(var i in rentsData){
-//                console.log(rentsData[i]);
-//                tableModel.append({
-//                                  idText: rentsData[i].id,
-//                                  roomIdText: rentsData[i].roomId,
-//                                  fromDateText: rentsData[i].fromDate,
-//                                  toDateText: rentsData[i].toDate
-//                                  })
-//            }
-//        }
-//        onRentsDataReceiveError: {
-//            console.log("failed!");
-//        }
-//    }
-
-//    UserData{
-//        id: userData
-//    }
-
     ListView {
         id: rentsListView
-        height: parent.height - roomsBlockText.height - rentsBlockText.height
+        height: parent.height - rentsBlockText.height
         ScrollBar.vertical: ScrollBar{
 
         }
@@ -56,8 +51,8 @@ Item {
         anchors.top: getRentsButton.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        delegate:
-            Item {
+        delegate: Item {
+                property RentObject rent: App.rentsManager.rentsModel.getRent(index)
                 id: item
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -75,12 +70,12 @@ Item {
                         Text{
                             id: rentRoomId
                             width: parent.width / 4
-                            text: roomIdText
+                            text: rent.roomId
                         }
 
                         Text{
                             id: id
-                            text: "Id: " + idText
+                            text: "Id: " + rent.id
                             width: parent.width / 4
                         }
 
@@ -90,16 +85,16 @@ Item {
 
                             Text{
                                 id: fromDate
-                                text: "From: " + fromDateText
+                                text: "From: " + rent.fromDate
                             }
 
                             Text{
                                 id: toDate
-                                text: "To: " + toDateText
+                                text: "To: " + rent.toDate
                             }
                         }
                         Button{
-                            id: bookRoomButton
+                            id: moreRentInfoButton
                             width: parent.width / 5
                             text: qsTr("More")
                             onClicked: {
@@ -110,8 +105,6 @@ Item {
                 }
         }
 
-        model: ListModel {
-            id: tableModel
-        }
+        model: App.rentsManager.rentsModel
     }
 }

@@ -95,7 +95,9 @@ class requestHandler(BaseHTTPRequestHandler):
 
                 else:
                     self.send_error(403)
-                self.end_headers()
+            else:
+                self.send_error(403)
+            self.end_headers()
 
         if self.path.split('/')[1] == 'delete':
             if adminSessionTokens.__contains__(jsonresult["sessionToken"]):

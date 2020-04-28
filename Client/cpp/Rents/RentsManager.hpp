@@ -1,20 +1,27 @@
 #ifndef RENTSMANAGER_HPP
 #define RENTSMANAGER_HPP
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include "Rentsmodel.hpp"
 #include "../Session.hpp"
 
 class RentsManager : public QObject
-{
+{   
     Q_OBJECT
+    Q_PROPERTY(RentsModel* rentsModel READ rentsModel WRITE setRentsModel NOTIFY rentsModelChanged)
 public:
     explicit RentsManager(Session* session = nullptr);
     Q_INVOKABLE void getUserRents(const QString& login);
 
+    RentsModel* rentsModel();
+    void setRentsModel(RentsModel* rentsModel);
+    Q_INVOKABLE void setNewRentsModel();
+    void setNewSession(const QString& token, const QString& login, bool isAdmin);
+
 signals:
-    void rentsDataReceived(const QList<QObject*>& rentsData);
+    void clearRentsModel();
+    void rentsModelChanged();
+    void rentsDataReceived();
     void rentsDataReceiveError(const QString& error);
     void addRentSuccess();
     void addRentError(const QString& error);

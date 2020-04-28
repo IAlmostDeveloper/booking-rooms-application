@@ -12,9 +12,6 @@ Item {
     width: parent.width
     height: parent.height
 
-    function clearList(){
-        tableModel.clear();
-    }
     function getRoomsList(){
         var hotel = hotelNameField.text;
         App.roomsManager.getParsedRoomsList(onlyAvailableCheckbox.checked, hotel);
@@ -40,36 +37,30 @@ Item {
 
     Connections{
         target: App.roomsManager
+        ignoreUnknownSignals: enabled
+        onRoomsModelChanged:{
+            roomsListView.model = App.roomsManager.roomsModel;
+        }
+
+        onRoomsDataReceived: {
+            console.log("rooms received")
+        }
+
+        onRoomsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
+
+        onAddRoomSuccess: {
+            console.log("added successfully");
+            getRoomsList();
+
+        }
+        onAddRoomError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
     }
-
-//    RoomsModel{
-//        id: roomsModel
-//        onRoomsDataReceived: {
-//            clearList();
-//            for(var i=0;i<roomsData.length;i++){
-//                tableModel.append({
-//                                  idText: roomsData[i].id,
-//                                  hotelNameText: roomsData[i].hotel,
-//                                  descriptionText : roomsData[i].description,
-//                                  availableText: roomsData[i].available ? "Yes" : "No"});
-//            }
-//        }
-
-//        onRoomsDataReceiveError: {
-//            errorDialog.setInformativeText(error);
-//            errorDialog.open();
-//        }
-
-//        onAddRoomSuccess: {
-//            console.log("added successfully");
-//            getRoomsList();
-
-//        }
-//        onAddRoomError: {
-//            errorDialog.setInformativeText(error);
-//            errorDialog.open();
-//        }
-//    }
 
     Row{
         id: roomParametersRow
@@ -114,8 +105,8 @@ Item {
         anchors.top: roomParametersRow.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        delegate:
-            Item {
+        delegate: Item {
+            property RoomObject room: App.roomsManager.roomsModel.getRoom(index)
                 id: item
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -133,13 +124,13 @@ Item {
                         Text{
                             id: description
                             width: parent.width / 4
-                            text: descriptionText
+                            text: room.description
                         }
 
                         Text{
                             id: hotel
                             width: parent.width / 4
-                            text: hotelNameText
+                            text: room.hotel
                         }
 
                         Column{
@@ -147,13 +138,14 @@ Item {
                             spacing: 5
                             Text{
                                 id: id
-                                text: "Id: " + idText
+                                text: "Id: " + room.id
                             }
                             Text{
                                 id: available
-                                text: "Available: " + availableText
+                                text: "Available: " + room.available
                             }
                         }
+
                         Button{
                             id: bookRoomButton
                             width: parent.width / 5
@@ -166,9 +158,7 @@ Item {
                 }
         }
 
-        model: ListModel {
-            id: tableModel
-        }
+        model: App.roomsManager.roomsModel
     }
 
     GridLayout{
@@ -185,11 +175,11 @@ Item {
         Column{
             spacing: 5
             Text{
-                text: qsTr("Hotel id")
+                text: qsTr("Hotel name")
             }
 
             TextField{
-              id: roomHotelIdField
+              id: roomHotelNameField
             }
         }
 
@@ -225,15 +215,16 @@ Item {
             Button{
                 id: addRoomButton
                 text: qsTr("Add");
-                enabled: !isNaN(roomHotelIdField.text) && roomHotelIdField.text.length!=0
+                enabled: roomHotelNameField.text.length!==0
                 onClicked: {
-                    roomsModel.addRoomToDatabase(roomHotelIdField.text,
+                    App.roomsManager.addRoomToDatabase(roomHotelNameField.text,
                                                  roomDescriptionField.text,
                                                  roomAvailableField.currentText=="Yes");
                 }
             }
         }
     }
+
     Dialog{
         id: calendarDialog
         title: qsTr("Select date")

@@ -1,7 +1,6 @@
 #ifndef HOTELSMANAGER_HPP
 #define HOTELSMANAGER_HPP
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include "Hotelsmodel.hpp"
 #include "../Session.hpp"
@@ -17,7 +16,7 @@ public:
                                         const QString& description, bool available);
     HotelsModel* hotelsModel();
     void setHotelsModel(HotelsModel* hotelsModel);
-    void setNewHotelsModel();
+    Q_INVOKABLE void setNewHotelsModel();
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
 
 signals:

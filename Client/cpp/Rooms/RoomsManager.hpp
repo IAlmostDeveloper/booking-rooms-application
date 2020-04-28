@@ -1,7 +1,6 @@
 #ifndef ROOMSMANAGER_HPP
 #define ROOMSMANAGER_HPP
 
-#include <QObject>
 #include <QNetworkAccessManager>
 #include "Roomsmodel.hpp"
 #include "../Session.hpp"
@@ -17,14 +16,17 @@ public:
                                        const QString& description, bool available);
     RoomsModel* roomsModel();
     void setRoomsModel(RoomsModel* roomsModel);
+    Q_INVOKABLE void setNewRoomsModel();
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
 
 signals:
+    void clearRoomsModel();
     void roomsModelChanged();
     void roomsDataReceived();
     void roomsDataReceiveError(const QString& error);
     void addRoomSuccess();
     void addRoomError(const QString& error);
+
 private:
     QNetworkAccessManager m_net;
     Session* m_currentSession;

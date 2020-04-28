@@ -3,6 +3,7 @@ import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.1
 import "qml"
+
 Window {
     id: root
     visible: true

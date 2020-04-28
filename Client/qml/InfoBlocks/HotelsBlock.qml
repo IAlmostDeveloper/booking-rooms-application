@@ -6,6 +6,7 @@ import Hotel 1.0
 
 Item {
     signal viewRoomsRequest(string hotelName)
+
     id: hotelsBlock
     width: parent.width
     height: parent.height
@@ -46,8 +47,7 @@ Item {
 
         onAddHotelSuccess: {
             console.log("added successfully");
-            hotelsModel.getParsedHotelsList();
-
+             App.hotelsManager.getParsedHotelsList();
         }
         onAddHotelError: {
             errorDialog.setInformativeText(error);
@@ -72,7 +72,6 @@ Item {
         width: parent.width
         height: parent.height - fieldsLayout.height - getHotelsButton.height
         ScrollBar.vertical: ScrollBar{
-
         }
 
         anchors.top: getHotelsButton.bottom
@@ -210,7 +209,7 @@ Item {
                 id: addHotelButton
                 text: qsTr("Add");
                 onClicked: {
-                    hotelsModel.addHotelToDatabase(hotelNameField.text,
+                    App.hotelsManager.addHotelToDatabase(hotelNameField.text,
                                                    hotelAddressField.text,
                                                    hotelDescriptionField.text,
                                                    hotelAvailableField.currentText=="Yes")

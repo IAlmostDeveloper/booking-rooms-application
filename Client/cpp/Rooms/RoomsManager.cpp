@@ -8,6 +8,7 @@
 RoomsManager::RoomsManager(Session *session)
 {
     m_currentSession = session;
+    setRoomsModel(new RoomsModel());
 }
 
 void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel)
@@ -19,7 +20,7 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
     QString hotelName = hotel!="" ? QString("&hotel=%1").arg(hotel) : "";
 
     QString str = QString("http://localhost:8080/%1?token=%2%3")
-            .arg(uri, m_currentSession->currentToken(), hotelName);
+            .arg(uri, m_currentSession->token(), hotelName);
     QUrl url(str);
     QNetworkRequest request(url);
     QNetworkReply *reply = m_net.get(request);
@@ -28,6 +29,7 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
             emit roomsDataReceiveError(reply->errorString());
         else
         {
+            emit clearRoomsModel();
             QString document = reply->readAll();
             document.remove("]");
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
@@ -49,12 +51,12 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
 
 void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &description, bool available)
 {
-    QUrl url(QString("http://localhost:%1/add/room").arg(8080));
+    QUrl url(QString("http://localhost:8080/add/room"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = 123;
-    body["hotelId"] = hotel;
+    body["sessionToken"] = m_currentSession->token();
+    body["hotel"] = hotel;
     body["description"] = description;
     body["available"] = available ? 1 : 0;
     QByteArray bodyData = QJsonDocument(body).toJson();
@@ -63,10 +65,8 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit addRoomError(reply->errorString());
-        else{
-            QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+        else
             emit addRoomSuccess();
-        }
         reply->deleteLater();
     });
 }
@@ -78,7 +78,14 @@ RoomsModel *RoomsManager::roomsModel()
 
 void RoomsManager::setRoomsModel(RoomsModel *roomsModel)
 {
-    m_roomsModel = roomsModel;
+    m_roomsModel = new RoomsModel();
+    emit roomsModelChanged();
+}
+
+void RoomsManager::setNewRoomsModel()
+{
+    m_roomsModel = new RoomsModel();
+    emit roomsModelChanged();
 }
 
 void RoomsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

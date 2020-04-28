@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QNetworkAccessManager>
-#include <QString>
 
 class AuthManager : public QObject
 {

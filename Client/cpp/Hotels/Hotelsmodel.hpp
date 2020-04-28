@@ -13,7 +13,6 @@ public:
     int rowCount(const QModelIndex& parent) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     void append(HotelObject* hotel);
-    Q_INVOKABLE void clear();
 
 private:
     QList<HotelObject*> m_hotels;

@@ -7,6 +7,7 @@ import App 1.0
 
 Item {
     signal successfulRegistration();
+
     id:registrationForm
     state: registrationForm.width >= registrationForm.height * 1.5 ? "Landscape" : "Portrait"
     states:[
@@ -29,6 +30,7 @@ Item {
             }
         }
     ]
+
     Rectangle{
      id: signUpBlock
      width: parent.width
@@ -49,6 +51,7 @@ Item {
                  family: "Helvetica"
              }
          }
+
          TextField{
             id: signUpLogin
             placeholderText: "Your login"
@@ -59,23 +62,28 @@ Item {
             placeholderText: "Your password"
             echoMode: TextField.Password
          }
+
          TextField{
             id: signUpRepeatPassword
             placeholderText: "Repeat password"
             echoMode: TextField.Password
          }
+
          TextField{
             id: signUpFirstName
             placeholderText: "First name"
          }
+
          TextField{
             id: signUpLastName
             placeholderText: "Last name"
          }
+
          TextField{
             id: signUpPassport
             placeholderText: "Passport"
          }
+
          Button{
              text: "Sign up"
              Layout.alignment: Layout.Center
@@ -91,6 +99,7 @@ Item {
                       && signUpLastName.text.length >= 2
                       && signUpPassport.text.length > 0
          }
+
          BusyIndicator{
             id: signUpProcessing
             visible: App.authManager.isRegProcessing
@@ -111,7 +120,7 @@ Item {
              errorDialog.setInformativeText(error);
              errorDialog.open();
          }
-     }
+      }
     }
 
     function clearFields(){

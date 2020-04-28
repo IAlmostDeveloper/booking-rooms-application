@@ -15,7 +15,7 @@ HotelsManager::HotelsManager(Session *session)
 void HotelsManager::getParsedHotelsList()
 {
     QString str = QString("http://localhost:8080/hotels?token=%1")
-            .arg(m_currentSession->currentToken());
+            .arg(m_currentSession->token());
     QUrl url(str);
     QNetworkRequest request(url);
     QNetworkReply *reply = m_net.get(request);
@@ -24,21 +24,20 @@ void HotelsManager::getParsedHotelsList()
             emit hotelsDataReceiveError(reply->errorString());
         else
         {
-            qDebug() << "About to emit";
             emit clearHotelsModel();
-            qDebug() << "Emitted";
             QString document = reply->readAll();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
-            for(auto i : raw)
-            {
-                QStringList hotelRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
-                int id = hotelRaw[0].toInt();
-                QString name = hotelRaw[1].remove("\"").remove(0,1);
-                QString address = hotelRaw[2].remove("\"").remove("]");
-                QString description = hotelRaw[3].remove("\"").remove("]");
-                bool available = hotelRaw[4].remove(" ").remove("]")=="1" ? true : false;
-                m_hotelsModel->append(new HotelObject(id, name, address, description, available));
-            }
+            if(raw.length()!=0)
+                for(auto i : raw)
+                {
+                    QStringList hotelRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
+                    int id = hotelRaw[0].toInt();
+                    QString name = hotelRaw[1].remove("\"").remove(0,1);
+                    QString address = hotelRaw[2].remove("\"").remove("]");
+                    QString description = hotelRaw[3].remove("\"").remove("]");
+                    bool available = hotelRaw[4].remove(" ").remove("]")=="1" ? true : false;
+                    m_hotelsModel->append(new HotelObject(id, name, address, description, available));
+                }
             emit hotelsDataReceived();
         }
         reply->deleteLater();
@@ -48,11 +47,11 @@ void HotelsManager::getParsedHotelsList()
 void HotelsManager::addHotelToDatabase(const QString& name, const QString& address,
                                      const QString& description, bool available)
 {
-    QUrl url(QString("http://localhost:%1/add/hotel").arg(8080));
+    QUrl url(QString("http://localhost:8080/add/hotel"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = 123;
+    body["sessionToken"] = m_currentSession->token();
     body["name"] = name;
     body["address"] = address;
     body["description"] = description;
@@ -63,10 +62,8 @@ void HotelsManager::addHotelToDatabase(const QString& name, const QString& addre
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit addHotelError(reply->errorString());
-        else{
-            QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
+        else
             emit addHotelSuccess();
-        }
         reply->deleteLater();
     });
 }
@@ -78,7 +75,6 @@ HotelsModel *HotelsManager::hotelsModel()
 
 void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
 {
-//    m_hotelsModel = hotelsModel;
     m_hotelsModel = new HotelsModel();
     emit hotelsModelChanged();
 }

@@ -26,16 +26,12 @@ void AuthManager::auth(const QString &login, const QString &password){
     QNetworkReply *reply = m_net.post(request, bodyData);
 
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
-        qDebug() << "lambda";
-        if(reply->error()!=QNetworkReply::NoError){
-            qDebug() << reply->errorString();
+        if(reply->error()!=QNetworkReply::NoError)
             emit authFailed(reply->errorString());
-        }
         else{
             QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
             emit authFinished(document["token"].toString(),
                     document["login"].toString(),document["isAdmin"].toBool());
-            qDebug() << "signal emit success";
         }
         reply->deleteLater();
         setAuthProcessing(false);
@@ -46,7 +42,7 @@ void AuthManager::reg(const QString& login, const QString& password, const QStri
                       const QString& lastName, const QString& passport)
 {
     setRegProcessing(true);
-    QUrl url(QString("http://localhost:%1/register").arg(8080));
+    QUrl url("http://localhost:8080/register");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;

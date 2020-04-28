@@ -26,16 +26,3 @@ void HotelsModel::append(HotelObject *hotel)
     m_hotels.append(hotel);
     endInsertRows();
 }
-
-void HotelsModel::clear()
-{
-//    beginResetModel();
-//    m_hotels.clear();
-//    endResetModel();
-    beginRemoveRows(QModelIndex(), 0, m_hotels.count());
-    for(int i=0;i<m_hotels.count();i++){
-        removeRow(i);
-        m_hotels[i]->deleteLater();
-    }
-    endRemoveRows();
-}

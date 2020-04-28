@@ -22,7 +22,7 @@ QVariant RoomsModel::data(const QModelIndex &index, int role) const
 
 void RoomsModel::append(RoomObject *room)
 {
-    beginInsertRows(QModelIndex(), 0, 0);
+    beginInsertRows(QModelIndex(), m_rooms.count(), m_rooms.count());
     m_rooms.append(room);
     endInsertRows();
 }

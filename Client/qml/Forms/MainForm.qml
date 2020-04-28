@@ -1,10 +1,10 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
+import App 1.0
 
 Item {
     id: mainForm
-
     TabBar{
         id: tabBar
         width: parent.width
@@ -38,6 +38,11 @@ Item {
         height: parent.height - tabBar.height - 20
         anchors.top: tabBar.bottom
         source: "qrc:/qml/InfoBlocks/HotelsBlock.qml"
+        onLoaded: {
+            App.hotelsManager.setNewHotelsModel();
+            App.roomsManager.setNewRoomsModel();
+            App.rentsManager.setNewRentsModel();
+        }
     }
 
     Connections{
@@ -46,6 +51,7 @@ Item {
         onViewRoomsRequest:{
             blockLoader.source = "qrc:/qml/InfoBlocks/RoomsBlock.qml";
             target.currentHotelName = hotelName;
+            tabBar.currentIndex = 1;
         }
     }
 }
