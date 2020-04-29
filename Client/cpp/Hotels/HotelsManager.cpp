@@ -75,13 +75,12 @@ HotelsModel *HotelsManager::hotelsModel()
 
 void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
 {
-    m_hotelsModel = new HotelsModel();
+    m_hotelsModel = hotelsModel;
     emit hotelsModelChanged();
 }
 void HotelsManager::setNewHotelsModel()
 {
-    m_hotelsModel = new HotelsModel();
-    emit hotelsModelChanged();
+    setHotelsModel(new HotelsModel());
 }
 
 void HotelsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

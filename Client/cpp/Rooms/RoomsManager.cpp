@@ -84,8 +84,7 @@ void RoomsManager::setRoomsModel(RoomsModel *roomsModel)
 
 void RoomsManager::setNewRoomsModel()
 {
-    m_roomsModel = new RoomsModel();
-    emit roomsModelChanged();
+    setRoomsModel(new RoomsModel());
 }
 
 void RoomsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

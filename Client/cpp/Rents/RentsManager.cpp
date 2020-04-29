@@ -59,8 +59,7 @@ void RentsManager::setRentsModel(RentsModel *rentsModel)
 
 void RentsManager::setNewRentsModel()
 {
-    m_rentsModel = new RentsModel();
-    emit rentsModelChanged();
+   setRentsModel(new RentsModel());
 }
 
 void RentsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)
