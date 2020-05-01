@@ -1,7 +1,9 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.2
+import QtQuick.Dialogs 1.2
 import App 1.0
 import Rent 1.0
+import Room 1.0
 
 Item {
     Connections{
@@ -98,7 +100,8 @@ Item {
                             width: parent.width / 5
                             text: qsTr("More")
                             onClicked: {
-
+                                App.roomsManager.getRoom(rent.roomId);
+                                roomInfoDialog.open();
                             }
                         }
                     }
@@ -106,5 +109,29 @@ Item {
         }
 
         model: App.rentsManager.rentsModel
+    }
+
+    Dialog{
+        id: roomInfoDialog
+        title: qsTr("Selected room")
+        Column {
+            spacing: 10
+
+            Text{
+                text: "room.id"
+            }
+
+            Text{
+                text: "room.description"
+            }
+
+            Text{
+                text: "room.available"
+            }
+
+            Text{
+                text: "room.hotel"
+            }
+        }
     }
 }
