@@ -201,6 +201,12 @@ class DatabaseManager:
         return cursor.fetchall()
 
     @staticmethod
+    def getRoomById(roomId):
+        cursor.execute("select * from rooms where id='{roomId}'".format(roomId=roomId))
+        conn.commit()
+        return cursor.fetchall()
+
+    @staticmethod
     def getRoomRents(roomId):
         cursor.execute("select * from rents where roomId='{roomId}'".format(roomId=roomId))
         conn.commit()
@@ -214,7 +220,7 @@ class DatabaseManager:
 
     @staticmethod
     def getRentsByLogin(login):
-        id = DatabaseManager.getUserId(login)[0];
+        id = DatabaseManager.getUserId(login)[0]
         cursor.execute("select * from rents where userId='{id}'".format(id=id))
         conn.commit()
         return cursor.fetchall()

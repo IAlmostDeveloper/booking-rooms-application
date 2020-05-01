@@ -12,6 +12,7 @@ class RoomsManager : public QObject
 public:
     explicit RoomsManager(Session* session = nullptr);
     Q_INVOKABLE void getParsedRoomsList(bool isOnlyAvailable, const QString& hotel = "");
+    Q_INVOKABLE void getRoom(int id);
     Q_INVOKABLE void addRoomToDatabase(const QString& hotel,
                                        const QString& description, bool available);
     RoomsModel* roomsModel();

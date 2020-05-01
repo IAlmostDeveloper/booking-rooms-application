@@ -49,6 +49,39 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
     });
 }
 
+void RoomsManager::getRoom(int id)
+{
+    QString str = QString("http://localhost:8080/room?token=%1&room=%2")
+            .arg(m_currentSession->token(), QString::number(id));
+    qDebug() << str;
+    QUrl url(str);
+    QNetworkRequest request(url);
+    QNetworkReply *reply = m_net.get(request);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit roomsDataReceiveError(reply->errorString());
+        else
+        {
+            emit clearRoomsModel();
+            QString document = reply->readAll();
+            document.remove("[").remove("]").remove("\"");
+            qDebug() << document;
+            if(document!="[]"){
+                QStringList roomRaw = document.split(QRegExp(","), QString::SkipEmptyParts);
+                int id = roomRaw[0].toInt();
+                QString hotel = roomRaw[1];
+                QString description = roomRaw[2];
+                bool available = roomRaw[3].remove(" ")=="1" ? true : false;
+                for(auto i:roomRaw)
+                    qDebug() << i;
+                m_roomsModel->append(new RoomObject(id, hotel, description, available));
+            }
+            emit roomsDataReceived();
+        }
+        reply->deleteLater();
+    });
+}
+
 void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &description, bool available)
 {
     QUrl url(QString("http://localhost:8080/add/room"));

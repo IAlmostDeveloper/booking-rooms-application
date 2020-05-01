@@ -27,6 +27,12 @@ class requestHandler(BaseHTTPRequestHandler):
                 hotelsList = DatabaseManager.getAvailableHotels()
                 self.wfile.write(json.dumps(hotelsList).encode())
 
+            if parsed[0] == 'room':
+                if len(parsed) < 5 or parsed[3] != 'room':
+                    return
+                roomsList = DatabaseManager.getRoomById(parsed[4])
+                self.wfile.write(json.dumps(roomsList).encode())
+
             if parsed[0] == 'rooms':
                 roomsList = DatabaseManager.getRooms()
                 self.wfile.write(json.dumps(roomsList).encode())
@@ -86,13 +92,14 @@ class requestHandler(BaseHTTPRequestHandler):
                     addHotel(jsonresult)
                 if self.path.endswith('/room'):
                     addRoom(jsonresult)
-                if self.path.endswith('/rent'):
-                    addRent(jsonresult)
                 if self.path.endswith('/client'):
                     addClient(jsonresult)
                 if self.path.endswith('/user'):
                     addUser(jsonresult)
-
+            elif userSessionTokens.__contains__(jsonresult["sessionToken"]):
+                self.send_response(200)
+                if self.path.endswith('/rent'):
+                    addRent(jsonresult)
                 else:
                     self.send_error(403)
             else:
@@ -136,8 +143,8 @@ class requestHandler(BaseHTTPRequestHandler):
             self.end_headers()
 
         if self.path.endswith('/register'):
-            if registerUser(jsonresult['login'], jsonresult['password'], jsonresult["firstName"],
-                            jsonresult["lastName"], jsonresult["passport"], jsonresult['rights']) == 'ok':
+            if registerUser(jsonresult["login"], jsonresult["password"], jsonresult["firstName"],
+                            jsonresult["lastName"], jsonresult["passport"], jsonresult["rights"]) == 'ok':
                 self.send_response(200)
             else:
                 self.send_error(400)
