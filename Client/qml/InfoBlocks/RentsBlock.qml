@@ -9,10 +9,6 @@ Item {
     Connections{
         target: App.rentsManager
         ignoreUnknownSignals: enabled
-        onRentsModelChanged:{
-            rentsListView.model = App.rentsManager.rentsModel;
-        }
-
         onRentsDataReceived: {
             console.log("rents received");
         }
@@ -54,7 +50,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         delegate: Item {
-                property RentObject rent: App.rentsManager.rentsModel.getRent(index)
                 id: item
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -72,12 +67,12 @@ Item {
                         Text{
                             id: rentRoomId
                             width: parent.width / 4
-                            text: rent.roomId
+                            text: model.roomId
                         }
 
                         Text{
                             id: id
-                            text: "Id: " + rent.id
+                            text: "Id: " + model.id
                             width: parent.width / 4
                         }
 
@@ -87,12 +82,12 @@ Item {
 
                             Text{
                                 id: fromDate
-                                text: "From: " + rent.fromDate
+                                text: "From: " + model.fromDate
                             }
 
                             Text{
                                 id: toDate
-                                text: "To: " + rent.toDate
+                                text: "To: " + model.toDate
                             }
                         }
                         Button{
@@ -100,7 +95,7 @@ Item {
                             width: parent.width / 5
                             text: qsTr("More")
                             onClicked: {
-                                App.roomsManager.getRoom(rent.roomId);
+                                App.roomsManager.getRoom(model.roomId);
                                 roomInfoDialog.open();
                             }
                         }

@@ -24,7 +24,7 @@ void HotelsManager::getParsedHotelsList()
             emit hotelsDataReceiveError(reply->errorString());
         else
         {
-            emit clearHotelsModel();
+            m_hotelsModel->clear();
             QString document = reply->readAll();
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
             if(raw.length()!=0)
@@ -62,8 +62,10 @@ void HotelsManager::addHotelToDatabase(const QString& name, const QString& addre
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit addHotelError(reply->errorString());
-        else
+        else{
             emit addHotelSuccess();
+            getParsedHotelsList();
+        }
         reply->deleteLater();
     });
 }
@@ -76,11 +78,6 @@ HotelsModel *HotelsManager::hotelsModel()
 void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
 {
     m_hotelsModel = hotelsModel;
-    emit hotelsModelChanged();
-}
-void HotelsManager::setNewHotelsModel()
-{
-    setHotelsModel(new HotelsModel());
 }
 
 void HotelsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

@@ -53,8 +53,6 @@ Item {
 
         onAddRoomSuccess: {
             console.log("added successfully");
-            getRoomsList();
-
         }
         onAddRoomError: {
             errorDialog.setInformativeText(error);
@@ -106,7 +104,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         delegate: Item {
-            property RoomObject room: App.roomsManager.roomsModel.getRoom(index)
                 id: item
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -124,13 +121,13 @@ Item {
                         Text{
                             id: description
                             width: parent.width / 4
-                            text: room.description
+                            text: model.description
                         }
 
                         Text{
                             id: hotel
                             width: parent.width / 4
-                            text: room.hotel
+                            text: model.hotel
                         }
 
                         Column{
@@ -138,11 +135,11 @@ Item {
                             spacing: 5
                             Text{
                                 id: id
-                                text: "Id: " + room.id
+                                text: "Id: " + model.id
                             }
                             Text{
                                 id: available
-                                text: "Available: " + room.available
+                                text: "Available: " + model.available
                             }
                         }
 

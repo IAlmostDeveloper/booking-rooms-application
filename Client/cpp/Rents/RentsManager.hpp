@@ -15,11 +15,9 @@ public:
 
     RentsModel* rentsModel();
     void setRentsModel(RentsModel* rentsModel);
-    Q_INVOKABLE void setNewRentsModel();
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
 
 signals:
-    void clearRentsModel();
     void rentsModelChanged();
     void rentsDataReceived();
     void rentsDataReceiveError(const QString& error);

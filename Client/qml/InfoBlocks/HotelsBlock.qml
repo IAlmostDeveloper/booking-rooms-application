@@ -32,10 +32,6 @@ Item {
     Connections{
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
-        onHotelsModelChanged:{
-            hotelsListView.model = App.hotelsManager.hotelsModel;
-        }
-
         onHotelsDataReceived: {
             console.log("hotels received");
         }
@@ -47,8 +43,8 @@ Item {
 
         onAddHotelSuccess: {
             console.log("added successfully");
-             App.hotelsManager.getParsedHotelsList();
         }
+
         onAddHotelError: {
             errorDialog.setInformativeText(error);
             errorDialog.open();
@@ -78,7 +74,6 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         delegate: Item {
-            property HotelObject hotel : App.hotelsManager.hotelsModel.getHotel(index)
                 id: item
                 width: parent.width
                 anchors.left: parent.left
@@ -98,19 +93,19 @@ Item {
                         Text{
                             id: name
                             width: parent.width / 6
-                            text: hotel.name
+                            text: model.name
                         }
 
                         Text{
                             id: address
                             width: parent.width / 6
-                            text: hotel.address
+                            text: model.address
                         }
 
                         Text{
                             id: description
                             width: parent.width / 5
-                            text: hotel.description
+                            text: model.description
                         }
 
                         Column{
@@ -118,14 +113,13 @@ Item {
                             spacing: 5
                             Text{
                                 id: id
-                                text: "Id: " + hotel.id
+                                text: "Id: " + model.id
                             }
                             Text{
                                 id: available
-                                text: "Available: " + hotel.available
+                                text: "Available: " + model.available
                             }
                         }
-
                         Button{
                             id: viewHotelRoomsButton
                             text: "View rooms"
@@ -135,9 +129,11 @@ Item {
                                 viewRoomsRequest(name.text);
                             }
                         }
+                        }
+
+
                     }
                 }
-        }
 
         model: App.hotelsManager.hotelsModel
     }

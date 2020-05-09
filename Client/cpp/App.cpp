@@ -15,13 +15,6 @@ App::App(QObject *parent)
     QObject::connect(m_authManager, &AuthManager::authFinished, m_hotelsManager, &HotelsManager::setNewSession);
     QObject::connect(m_authManager, &AuthManager::authFinished, m_roomsManager, &RoomsManager::setNewSession);
     QObject::connect(m_authManager, &AuthManager::authFinished, m_rentsManager, &RentsManager::setNewSession);
-
-    QObject::connect(m_hotelsManager, &HotelsManager::clearHotelsModel,
-                     m_hotelsManager, &HotelsManager::setNewHotelsModel);
-    QObject::connect(m_roomsManager, &RoomsManager::clearRoomsModel,
-                     m_roomsManager, &RoomsManager::setNewRoomsModel);
-    QObject::connect(m_rentsManager, &RentsManager::clearRentsModel,
-                     m_rentsManager, &RentsManager::setNewRentsModel);
 }
 
 AuthManager* App::authManager()

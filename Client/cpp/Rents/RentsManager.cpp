@@ -26,6 +26,7 @@ void RentsManager::getUserRents(const QString &login)
             emit rentsDataReceiveError(reply->errorString());
         else
         {
+            m_rentsModel->clear();
             QString document = reply->readAll();
             document.remove("]");
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
@@ -54,12 +55,6 @@ RentsModel *RentsManager::rentsModel()
 void RentsManager::setRentsModel(RentsModel *rentsModel)
 {
     m_rentsModel = new RentsModel();
-    emit rentsModelChanged();
-}
-
-void RentsManager::setNewRentsModel()
-{
-   setRentsModel(new RentsModel());
 }
 
 void RentsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

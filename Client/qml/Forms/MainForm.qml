@@ -38,11 +38,6 @@ Item {
         height: parent.height - tabBar.height - 20
         anchors.top: tabBar.bottom
         source: "qrc:/qml/InfoBlocks/HotelsBlock.qml"
-        onLoaded: {
-            App.hotelsManager.setNewHotelsModel();
-            App.roomsManager.setNewRoomsModel();
-            App.rentsManager.setNewRentsModel();
-        }
     }
 
     Connections{

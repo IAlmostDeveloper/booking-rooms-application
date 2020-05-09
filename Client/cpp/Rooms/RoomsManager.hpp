@@ -17,11 +17,9 @@ public:
                                        const QString& description, bool available);
     RoomsModel* roomsModel();
     void setRoomsModel(RoomsModel* roomsModel);
-    Q_INVOKABLE void setNewRoomsModel();
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
 
 signals:
-    void clearRoomsModel();
     void roomsModelChanged();
     void roomsDataReceived();
     void roomsDataReceiveError(const QString& error);

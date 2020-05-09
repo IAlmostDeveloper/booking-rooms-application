@@ -29,7 +29,7 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
             emit roomsDataReceiveError(reply->errorString());
         else
         {
-            emit clearRoomsModel();
+            m_roomsModel->clear();
             QString document = reply->readAll();
             document.remove("]");
             QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
@@ -62,7 +62,6 @@ void RoomsManager::getRoom(int id)
             emit roomsDataReceiveError(reply->errorString());
         else
         {
-            emit clearRoomsModel();
             QString document = reply->readAll();
             document.remove("[").remove("]").remove("\"");
             qDebug() << document;
@@ -99,7 +98,10 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
         if(reply->error()!=QNetworkReply::NoError)
             emit addRoomError(reply->errorString());
         else
+        {
             emit addRoomSuccess();
+            getParsedRoomsList(false);
+        }
         reply->deleteLater();
     });
 }
@@ -112,12 +114,6 @@ RoomsModel *RoomsManager::roomsModel()
 void RoomsManager::setRoomsModel(RoomsModel *roomsModel)
 {
     m_roomsModel = new RoomsModel();
-    emit roomsModelChanged();
-}
-
-void RoomsManager::setNewRoomsModel()
-{
-    setRoomsModel(new RoomsModel());
 }
 
 void RoomsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)

@@ -96,7 +96,8 @@ class requestHandler(BaseHTTPRequestHandler):
                     addClient(jsonresult)
                 if self.path.endswith('/user'):
                     addUser(jsonresult)
-            elif userSessionTokens.__contains__(jsonresult["sessionToken"]):
+            if userSessionTokens.__contains__(jsonresult["sessionToken"]) \
+                    or adminSessionTokens.__contains__(jsonresult["sessionToken"]):
                 self.send_response(200)
                 if self.path.endswith('/rent'):
                     addRent(jsonresult)
