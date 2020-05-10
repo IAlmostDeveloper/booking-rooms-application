@@ -2,6 +2,7 @@
 #define SESSION_HPP
 
 #include <QObject>
+#include <QNetworkAccessManager>
 
 class Session : public QObject
 {
@@ -17,11 +18,15 @@ public:
     void setToken(const QString& token);
     void setLogin(const QString& login);
     void setIsAdmin(bool isAdmin);
+    void getUserRights();
 signals:
     void tokenChanged();
     void loginChanged();
     void isAdminChanged();
+    void userRightsReceiveSuccess(const QString& rights);
+    void userRightsReceiveError(const QString& error);
 private:
+    QNetworkAccessManager m_net;
     QString m_token;
     QString m_login;
     bool m_isAdmin;

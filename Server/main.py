@@ -77,6 +77,11 @@ class requestHandler(BaseHTTPRequestHandler):
                 if adminSessionTokens.__contains__(token):
                     usersList = DatabaseManager.getUsers()
                     self.wfile.write(json.dumps(usersList).encode())
+            if parsed[0] == 'user-rights':
+                if len(parsed) < 5 or parsed[3] != 'user':
+                    return
+                usersList = DatabaseManager.getUserRights(parsed[4])[0]
+                self.wfile.write(json.dumps(usersList).encode())
         else:
             self.send_error(403)
             self.end_headers()

@@ -4,10 +4,13 @@
         <file>qml/Forms/LoginForm.qml</file>
         <file>qml/Forms/MainForm.qml</file>
         <file>qml/Forms/RegisterForm.qml</file>
-        <file>qml/InfoBlocks/HotelsBlock.qml</file>
-        <file>qml/InfoBlocks/RentsBlock.qml</file>
-        <file>qml/InfoBlocks/RoomsBlock.qml</file>
         <file>qml/BottomMenu.qml</file>
         <file>qml/BottomMenuButton.qml</file>
+        <file>qml/InfoBlocks/User/UserRoomsBlock.qml</file>
+        <file>qml/InfoBlocks/User/UserRentsBlock.qml</file>
+        <file>qml/InfoBlocks/User/UserHotelsBlock.qml</file>
+        <file>qml/InfoBlocks/Admin/AdminRoomsBlock.qml</file>
+        <file>qml/InfoBlocks/Admin/AdminRentsBlock.qml</file>
+        <file>qml/InfoBlocks/Admin/AdminHotelsBlock.qml</file>
     </qresource>
 </RCC>

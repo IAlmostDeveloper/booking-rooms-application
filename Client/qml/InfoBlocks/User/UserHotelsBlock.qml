@@ -11,24 +11,6 @@ Item {
     width: parent.width
     height: parent.height
 
-    state: hotelsBlock.width >= hotelsBlock.height * 1.75 ? "Landscape" : "Portrait"
-    states:[
-        State{
-            name: "Portrait"
-            PropertyChanges {
-                target: fieldsLayout
-                columns: 2
-            }
-        },
-        State{
-            name: "Landscape"
-            PropertyChanges {
-                target: fieldsLayout
-                columns: 4
-            }
-        }
-    ]
-
     Connections{
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
@@ -37,15 +19,6 @@ Item {
         }
 
         onHotelsDataReceiveError: {
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
-        }
-
-        onAddHotelSuccess: {
-            console.log("added successfully");
-        }
-
-        onAddHotelError: {
             errorDialog.setInformativeText(error);
             errorDialog.open();
         }
@@ -66,7 +39,7 @@ Item {
     ListView {
         id: hotelsListView
         width: parent.width
-        height: parent.height - fieldsLayout.height - getHotelsButton.height
+        height: parent.height - getHotelsButton.height
         ScrollBar.vertical: ScrollBar{
         }
 
@@ -136,81 +109,5 @@ Item {
                 }
 
         model: App.hotelsManager.hotelsModel
-    }
-
-    GridLayout{
-        id: fieldsLayout
-        anchors{
-            bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
-        }
-
-        columns: 4
-        rows: 1
-        columnSpacing: 10
-
-        Column{
-            spacing: 5
-            Text{
-                text: qsTr("Name")
-            }
-
-            TextField{
-              id: hotelNameField
-            }
-        }
-
-        Column{
-            spacing: 5
-            Text{
-                text: qsTr("Address")
-            }
-
-            TextField{
-              id: hotelAddressField
-            }
-        }
-
-        Column{
-            spacing: 5
-            Text{
-                text: qsTr("Available")
-            }
-
-            ComboBox{
-                id: hotelAvailableField
-                model: ["Yes", "No"]
-            }
-        }
-
-        Column{
-            spacing: 5
-            Text{
-                text: qsTr("Description")
-            }
-
-            TextField{
-              id: hotelDescriptionField
-            }
-        }
-
-
-        Column{
-            spacing: 10
-
-            Text{
-            }
-
-            Button{
-                id: addHotelButton
-                text: qsTr("Add");
-                onClicked: {
-                    App.hotelsManager.addHotelToDatabase(hotelNameField.text,
-                                                   hotelAddressField.text,
-                                                   hotelDescriptionField.text,
-                                                   hotelAvailableField.currentText=="Yes")
-                }
-            }
-        }
     }
 }
