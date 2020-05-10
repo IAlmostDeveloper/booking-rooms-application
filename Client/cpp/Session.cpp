@@ -36,6 +36,11 @@ void Session::setLogin(const QString& login)
     m_login = login;
 }
 
+void Session::setIsAdmin(bool isAdmin)
+{
+    m_isAdmin = isAdmin;
+}
+
 bool Session::isAdmin()
 {
     return m_isAdmin;

@@ -12,7 +12,8 @@ class RentsManager : public QObject
 public:
     explicit RentsManager(Session* session = nullptr);
     Q_INVOKABLE void getUserRents(const QString& login);
-
+    Q_INVOKABLE void addUserRent(int roomId, const QString& user,
+                                 const QString &fromDate, const QString &toDate);
     RentsModel* rentsModel();
     void setRentsModel(RentsModel* rentsModel);
     void setNewSession(const QString& token, const QString& login, bool isAdmin);

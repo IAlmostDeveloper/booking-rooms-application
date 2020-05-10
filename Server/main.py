@@ -176,7 +176,8 @@ def addRoom(jsonresult):
 
 
 def addRent(jsonresult):
-    DatabaseManager.addRent(jsonresult["roomId"], jsonresult["userId"],
+    userId = DatabaseManager.getUserId(jsonresult["user"])[0]
+    DatabaseManager.addRent(jsonresult["roomId"], userId,
                             jsonresult["fromDate"], jsonresult["toDate"])
 
 

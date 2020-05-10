@@ -8,6 +8,7 @@ import App 1.0
 
 Item {
     property string currentHotelName: ""
+    property int roomIdToBook: 0
     id: roomsBlock
     width: parent.width
     height: parent.height
@@ -148,6 +149,7 @@ Item {
                             width: parent.width / 5
                             text: qsTr("Book")
                             onClicked: {
+                                roomIdToBook = model.id;
                                 calendarDialog.open();
                             }
                         }
@@ -229,10 +231,17 @@ Item {
         Calendar{
             id: calendar
             minimumDate: new Date()
-            maximumDate: new Date(2020, 4, 31)
+            maximumDate: new Date(2025, 1, 1)
         }
         onAccepted: {
             console.log(Qt.formatDate(calendar.selectedDate, "dd-MM-yy"));
+            console.log(roomIdToBook);
+            App.rentsManager.addUserRent(
+                         roomIdToBook,
+                         App.session.login,
+                         Qt.formatDate(calendar.selectedDate, "dd-MM-yy"),
+                         Qt.formatDate(calendar.selectedDate, "dd-MM-yy"))
+            console.log("accepted");
         }
     }
 }

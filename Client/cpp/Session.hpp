@@ -7,14 +7,16 @@ class Session : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QString login READ login WRITE setLogin NOTIFY loginChanged)
+    Q_PROPERTY(bool isAdmin READ isAdmin WRITE setIsAdmin NOTIFY isAdminChanged)
 public: 
     explicit Session();
     Session(const QString token, const QString &login, bool isAdmin);
     QString token();
     QString login();
+    bool isAdmin();
     void setToken(const QString& token);
     void setLogin(const QString& login);
-    bool isAdmin();
+    void setIsAdmin(bool isAdmin);
 signals:
     void tokenChanged();
     void loginChanged();
