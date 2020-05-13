@@ -7,8 +7,9 @@ import App 1.0
 
 Item {
     signal successfulRegistration();
+    signal loginRequest();
 
-    id:registrationForm
+    id: registrationForm
     state: registrationForm.width >= registrationForm.height * 1.5 ? "Landscape" : "Portrait"
     states:[
         State{
@@ -106,6 +107,30 @@ Item {
             Layout.alignment: Layout.Center
             }
         }
+     Row{
+         id: loginSuggestion
+         anchors.top: registrationLayout.bottom
+         anchors.horizontalCenter: registrationLayout.horizontalCenter
+         anchors.topMargin: 30
+         spacing: 10
+
+         Text {
+             text: qsTr("Already have an account? ")
+         }
+
+         Text {
+             text: qsTr("Sign In")
+             font.underline: enabled
+
+             MouseArea{
+                 anchors.fill: parent
+                 onClicked: {
+                     loginRequest();
+                 }
+                 cursorShape: "PointingHandCursor"
+             }
+         }
+     }
 
      Connections{
          target: App.authManager

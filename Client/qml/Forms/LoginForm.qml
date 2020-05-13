@@ -11,6 +11,8 @@ Item{
     }
 
     signal successfulLogin();
+    signal registerRequest();
+
     id: loginForm
     state: loginForm.width >= loginForm.height * 1.75 ? "Landscape" : "Portrait"
     states:[
@@ -81,6 +83,31 @@ Item{
                 id: loginProcessing
                 visible: App.authManager.isAuthProcessing
                 Layout.alignment: Layout.Center
+            }
+        }
+
+        Row{
+            id: registerSuggestion
+            anchors.top: loginLayout.bottom
+            anchors.horizontalCenter: loginLayout.horizontalCenter
+            anchors.topMargin: 30
+            spacing: 10
+
+            Text {
+                text: qsTr("No account yet? ")
+            }
+
+            Text {
+                text: qsTr("Sign Up")
+                font.underline: enabled
+
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        registerRequest();
+                    }
+                    cursorShape: "PointingHandCursor"
+                }
             }
         }
 

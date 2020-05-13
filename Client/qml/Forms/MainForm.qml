@@ -5,16 +5,36 @@ import App 1.0
 
 Item {
     id: mainForm
-    property bool showAdminBlocks : false
-    Component.onCompleted: {
-        showAdminBlocks = App.session.isAdmin;
-        console.log(showAdminBlocks);
+    property bool showAdminBlocks : App.session.isAdmin
+    signal logoutRequest();
+
+    Text{
+        id: userNameText
+        anchors.leftMargin: 20
+        text: "Hello, " + App.session.login;
+    }
+
+    Text{
+        id: logoutText
+        anchors.right: parent.right
+        anchors.rightMargin: 15
+        text: "Logout"
+        font.underline: enabled
+
+        MouseArea{
+            anchors.fill: parent
+            cursorShape: "PointingHandCursor"
+            onClicked: {
+                logoutRequest();
+                App.invalidateSession();
+            }
+        }
     }
 
     TabBar{
         id: tabBar
         width: parent.width
-        anchors.top: parent.top
+        anchors.top: userNameText.bottom
 
         TabButton{
             text: "Hotels"
