@@ -72,7 +72,6 @@ void RoomsManager::getRoom(int id)
                 QString description = roomRaw[2];
                 bool available = roomRaw[3].remove(" ")=="1" ? true : false;
                 for(auto i:roomRaw)
-                    qDebug() << i;
                 m_roomsModel->append(new RoomObject(id, hotel, description, available));
             }
             emit roomsDataReceived();
@@ -114,9 +113,5 @@ RoomsModel *RoomsManager::roomsModel()
 void RoomsManager::setRoomsModel(RoomsModel *roomsModel)
 {
     m_roomsModel = new RoomsModel();
-}
-
-void RoomsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)
-{
-    m_currentSession = new Session(token, login, isAdmin);
+    emit roomsModelChanged();
 }

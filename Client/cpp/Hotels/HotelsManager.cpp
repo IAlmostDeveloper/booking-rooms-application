@@ -78,9 +78,5 @@ HotelsModel *HotelsManager::hotelsModel()
 void HotelsManager::setHotelsModel(HotelsModel *hotelsModel)
 {
     m_hotelsModel = hotelsModel;
-}
-
-void HotelsManager::setNewSession(const QString &token, const QString &login, bool isAdmin)
-{
-    m_currentSession = new Session(token, login, isAdmin);
+    emit hotelsModelChanged();
 }

@@ -5,16 +5,14 @@
 
 Session::Session()
 {
-    m_token = "";
-    m_login = "";
     getUserRights();
 }
 
 Session::Session(const QString token, const QString &login, bool isAdmin)
 {
-    m_token = token;
-    m_login = login;
-    m_isAdmin = isAdmin;
+    setToken(token);
+    setLogin(login);
+    setIsAdmin(isAdmin);
     getUserRights();
 }
 
@@ -30,22 +28,26 @@ QString Session::login()
 
 bool Session::isAdmin()
 {
+    qDebug() << Q_FUNC_INFO << m_isAdmin;
     return m_isAdmin;
 }
 
 void Session::setToken(const QString& token)
 {
     m_token = token;
+    emit tokenChanged();
 }
 
 void Session::setLogin(const QString& login)
 {
     m_login = login;
+    emit loginChanged();
 }
 
 void Session::setIsAdmin(bool isAdmin)
 {
     m_isAdmin = isAdmin;
+    emit isAdminChanged();
 }
 
 void Session::getUserRights()
@@ -67,4 +69,14 @@ void Session::getUserRights()
         }
         reply->deleteLater();
     });
+}
+
+bool Session::isValid() const
+{
+    return m_isValid;
+}
+
+void Session::setIsValid(bool isValid)
+{
+    m_isValid = isValid;
 }

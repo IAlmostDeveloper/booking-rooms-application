@@ -18,17 +18,21 @@ class App : public QObject
     Q_PROPERTY(RentsManager* rentsManager READ rentsManager WRITE setRentsManager NOTIFY rentsManagerChanged)
 public:
     App(QObject *parent = nullptr);
+
     AuthManager* authManager();
     Session* session();
     HotelsManager* hotelsManager();
     RoomsManager* roomsManager();
     RentsManager* rentsManager();
+
     void setAuthManager(AuthManager* authManager);
     void setSession(Session* session);
     void setHotelsManager(HotelsManager* hotelsManager);
     void setRoomsManager(RoomsManager* roomsManager);
     void setRentsManager(RentsManager* rentsManager);
-    Q_INVOKABLE void createSession(const QString& token, const QString& login, bool isAdmin);
+
+    Q_INVOKABLE void initSession(const QString& token, const QString& login, bool isAdmin);
+    Q_INVOKABLE void invalidateSession();
 signals:
     void authManagerChanged();
     void sessionChanged();

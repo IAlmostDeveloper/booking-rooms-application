@@ -10,11 +10,7 @@ App::App(QObject *parent)
     setRoomsManager(new RoomsManager(m_session));
     setRentsManager(new RentsManager(m_session));
 
-    QObject::connect(m_authManager, &AuthManager::authFinished, this, &App::createSession);
-
-    QObject::connect(m_authManager, &AuthManager::authFinished, m_hotelsManager, &HotelsManager::setNewSession);
-    QObject::connect(m_authManager, &AuthManager::authFinished, m_roomsManager, &RoomsManager::setNewSession);
-    QObject::connect(m_authManager, &AuthManager::authFinished, m_rentsManager, &RentsManager::setNewSession);
+    QObject::connect(m_authManager, &AuthManager::authFinished, this, &App::initSession);
 }
 
 AuthManager* App::authManager()
@@ -45,29 +41,48 @@ RentsManager *App::rentsManager()
 void App::setAuthManager(AuthManager *authManager)
 {
     m_authManager = authManager;
+    emit authManagerChanged();
 }
 
-void App::createSession(const QString &token, const QString &login, bool isAdmin)
+void App::initSession(const QString &token, const QString &login, bool isAdmin)
 {
-    m_session = new Session(token, login, isAdmin);
+    m_session->setToken(token);
+    m_session->setLogin(login);
+    m_session->setIsAdmin(isAdmin);
+    m_session->setIsValid(true);
+    emit sessionChanged();
+
+}
+
+void App::invalidateSession()
+{
+    m_session->setToken("");
+    m_session->setLogin("");
+    m_session->setIsAdmin(false);
+    m_session->setIsValid(false);
+    emit sessionChanged();
 }
 
 void App::setSession(Session *session)
 {
     m_session = session;
+    emit sessionChanged();
 }
 
 void App::setHotelsManager(HotelsManager *hotelsManager)
 {
     m_hotelsManager = hotelsManager;
+    emit hotelsManagerChanged();
 }
 
 void App::setRoomsManager(RoomsManager *roomsManager)
 {
     m_roomsManager = roomsManager;
+    emit roomsManagerChanged();
 }
 
 void App::setRentsManager(RentsManager *rentsManager)
 {
     m_rentsManager = rentsManager;
+    emit rentsManagerChanged();
 }
