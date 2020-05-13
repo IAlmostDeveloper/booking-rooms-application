@@ -4,8 +4,6 @@
         <file>qml/Forms/LoginForm.qml</file>
         <file>qml/Forms/MainForm.qml</file>
         <file>qml/Forms/RegisterForm.qml</file>
-        <file>qml/BottomMenu.qml</file>
-        <file>qml/BottomMenuButton.qml</file>
         <file>qml/InfoBlocks/User/UserRoomsBlock.qml</file>
         <file>qml/InfoBlocks/User/UserRentsBlock.qml</file>
         <file>qml/InfoBlocks/User/UserHotelsBlock.qml</file>
