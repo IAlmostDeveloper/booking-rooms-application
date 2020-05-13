@@ -18,35 +18,36 @@ Window {
         "SignUp" : "qml/Forms/RegisterForm.qml",
         "Hotels" : "qml/Forms/MainForm.qml"
     }
+    property string currentForm: "SignIn"
 
     Loader{
         id: mainLoader
-        width: parent.width
-        height: parent.height - bottomMenu.height
-        anchors{
-            bottom: bottomMenu.top
-            top: parent.top
-            horizontalCenter: parent.horizontalCenter
-        }
-        source: applicationForms[bottomMenu.pressedButton]
+        anchors.fill: parent
+        source: applicationForms[currentForm]
     }
 
     Connections{
         target: mainLoader.item
         ignoreUnknownSignals: enabled
-        onSuccessfulLogin:{
-            bottomMenu.pressedButton = "Hotels";
-        }
-        onSuccessfulRegistration:{
-            bottomMenu.pressedButton = "SignIn";
-        }
-    }
 
-    BottomMenu{
-        id: bottomMenu
-        anchors{
-            horizontalCenter: parent.horizontalCenter
-            bottom: parent.bottom
+        onSuccessfulLogin:{         
+            currentForm = "Hotels";
+        }
+
+        onSuccessfulRegistration:{
+            currentForm = "SignIn";
+        }
+
+        onLoginRequest:{
+            currentForm = "SignIn"
+        }
+
+        onRegisterRequest:{
+            currentForm = "SignUp";
+        }
+
+        onLogoutRequest:{
+            currentForm = "SignIn";
         }
     }
 
