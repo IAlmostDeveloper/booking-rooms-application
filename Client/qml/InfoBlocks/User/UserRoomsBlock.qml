@@ -5,6 +5,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 import Room 1.0
 import App 1.0
+import "../../../"
 
 Item {
     property string currentHotelName: ""
@@ -75,7 +76,8 @@ Item {
         anchors.top: roomParametersRow.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        delegate: Item {
+        delegate:
+            Item {
                 id: item
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -127,18 +129,24 @@ Item {
                     }
                 }
         }
-
         model: App.roomsManager.roomsModel
     }
 
     Dialog{
         id: calendarDialog
+        width: 265
+        height: 295
         title: qsTr("Select date")
         standardButtons: StandardButton.Cancel | StandardButton.Ok
-        Calendar{
+
+        Rectangle{
             id: calendar
-            minimumDate: new Date()
-            maximumDate: new Date(2025, 1, 1)
+            width: parent.width
+            height: parent.height
+            border.color: "black"
+            CustomCalendar{
+                anchors.fill: parent
+            }
         }
         onAccepted: {
             App.rentsManager.addUserRent(

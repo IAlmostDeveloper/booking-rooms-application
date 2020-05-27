@@ -10,5 +10,6 @@
         <file>qml/InfoBlocks/Admin/AdminRoomsBlock.qml</file>
         <file>qml/InfoBlocks/Admin/AdminRentsBlock.qml</file>
         <file>qml/InfoBlocks/Admin/AdminHotelsBlock.qml</file>
+        <file>CustomCalendar.qml</file>
     </qresource>
 </RCC>
