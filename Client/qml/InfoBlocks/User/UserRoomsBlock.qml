@@ -134,18 +134,22 @@ Item {
 
     Dialog{
         id: calendarDialog
-        width: 265
+        width: 305
         height: 335
         title: qsTr("Select date")
         standardButtons: StandardButton.Cancel | StandardButton.Ok
 
         Rectangle{
+            property var selectedDate: new Date()
             id: calendar
             width: parent.width
             height: parent.height
             border.color: "black"
             CustomCalendar{
                 anchors.fill: parent
+                onDateSelected:{
+                    console.log(selectedDate);
+                }
             }
         }
         onAccepted: {

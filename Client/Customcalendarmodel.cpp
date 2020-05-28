@@ -70,6 +70,10 @@ void CustomCalendarModel::clear()
 void CustomCalendarModel::fillCalendar()
 {
     int currentMonth = m_currentDate.month();
+    int currentDayOfWeek = m_currentDate.dayOfWeek();
+    qDebug() << "Day of week:" << currentDayOfWeek;
+    for(int i=0;i<currentDayOfWeek-1;i++)
+        append(new CalendarDay(-1, false));
     while(m_currentDate.month()==currentMonth){
         append(new CalendarDay(m_currentDate.day(), true));
         m_currentDate = m_currentDate.addDays(1);
