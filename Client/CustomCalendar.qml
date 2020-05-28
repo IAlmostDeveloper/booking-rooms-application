@@ -3,11 +3,44 @@ import CustomCalendarModel 1.0
 
 Item {
     property int selectedDate: -1
+    property var months: ["jan", "feb", "mar", "apr", "may", "jun",
+        "jul","aug","sep", "oct", "nov", "dec"]
+
     Column{
         anchors.fill: parent
+
+        Row{
+            id: calendarSlider
+            height: 25
+            anchors.horizontalCenter: parent.horizontalCenter
+            spacing: 10
+            Text {
+                text: qsTr("prev")
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        customCalendarModel.currentMonth = customCalendarModel.currentMonth - 1;
+                    }
+                }
+            }
+            Text {
+                text: qsTr(months[customCalendarModel.currentMonth-1] + " " + customCalendarModel.currentYear)
+            }
+            Text {
+                text: qsTr("next")
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        customCalendarModel.currentMonth = customCalendarModel.currentMonth + 1;
+                    }
+                }
+            }
+        }
+
         GridView{
-            anchors.fill: parent
-            model: CustomCalendarModel{}
+            width: parent.width
+            height: parent.height- calendarSlider.height
+            model: customCalendarModel
             cellWidth: 40
             cellHeight: 40
             delegate: Rectangle{
@@ -28,6 +61,10 @@ Item {
                         }
                     }
             }
+        }
+
+        CustomCalendarModel{
+            id: customCalendarModel
         }
     }
 }

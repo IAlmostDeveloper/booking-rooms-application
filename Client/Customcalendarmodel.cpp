@@ -1,9 +1,39 @@
 #include "Customcalendarmodel.hpp"
+#include <QDebug>
 
 CustomCalendarModel::CustomCalendarModel()
 {
-    for(int i=1;i<31;i++)
-        append(new CalendarDay(i, random() % 4 > 1));
+    m_currentDate = QDate::currentDate();
+    qDebug() << m_currentDate;
+    fillCalendar();
+}
+
+int CustomCalendarModel::currentMonth()
+{
+    return m_currentDate.month();
+}
+
+int CustomCalendarModel::currentYear()
+{
+    return m_currentDate.year();
+}
+
+void CustomCalendarModel::setCurrentMonth(int month)
+{
+    if(month==m_currentDate.month()) return;
+    if(month>m_currentDate.month())
+        m_currentDate = m_currentDate.addMonths(month-m_currentDate.month());
+    if(month<m_currentDate.month())
+        m_currentDate = m_currentDate.addMonths(month-m_currentDate.month());
+    emit currentMonthChanged();
+    qDebug() << m_currentDate.month();
+    clear();
+    fillCalendar();
+}
+
+void CustomCalendarModel::setCurrentYear(int year)
+{
+
 }
 
 int CustomCalendarModel::rowCount(const QModelIndex &parent) const
@@ -35,6 +65,16 @@ void CustomCalendarModel::clear()
     beginResetModel();
     m_calendarDays.clear();
     endResetModel();
+}
+
+void CustomCalendarModel::fillCalendar()
+{
+    int currentMonth = m_currentDate.month();
+    while(m_currentDate.month()==currentMonth){
+        append(new CalendarDay(m_currentDate.day(), true));
+        m_currentDate = m_currentDate.addDays(1);
+    }
+    m_currentDate = m_currentDate.addMonths(-1);
 }
 
 QHash<int, QByteArray> CustomCalendarModel::roleNames() const

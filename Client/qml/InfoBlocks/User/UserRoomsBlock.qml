@@ -135,7 +135,7 @@ Item {
     Dialog{
         id: calendarDialog
         width: 265
-        height: 295
+        height: 335
         title: qsTr("Select date")
         standardButtons: StandardButton.Cancel | StandardButton.Ok
 
