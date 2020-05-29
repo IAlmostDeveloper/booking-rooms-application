@@ -41,7 +41,7 @@ Item {
 
     ListView {
         id: rentsListView
-        height: parent.height - rentsBlockText.height
+        height: parent.height - rentsBlockText.height - userNameText.height - getRentsButton.height
         ScrollBar.vertical: ScrollBar{
 
         }

@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE void getRoom(int id);
     Q_INVOKABLE void addRoomToDatabase(const QString& hotel,
                                        const QString& description, bool available);
+    Q_INVOKABLE void getRoomBookedDays(int roomId);
     RoomsModel* roomsModel();
     void setRoomsModel(RoomsModel* roomsModel);
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
@@ -23,6 +24,8 @@ signals:
     void roomsModelChanged();
     void roomsDataReceived();
     void roomsDataReceiveError(const QString& error);
+    void roomBookedDaysReceiveError(const QString& error);
+    void roomBookedDaysReceiveSuccess(QStringList bookedDays);
     void addRoomSuccess();
     void addRoomError(const QString& error);
 

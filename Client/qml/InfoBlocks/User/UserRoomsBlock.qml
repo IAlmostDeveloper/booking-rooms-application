@@ -124,6 +124,7 @@ Item {
                             onClicked: {
                                 roomIdToBook = model.id;
                                 calendarDialog.open();
+                                App.roomsManager.getRoomBookedDays(model.id);
                             }
                         }
                     }
@@ -146,8 +147,10 @@ Item {
             height: parent.height
             border.color: "black"
             CustomCalendar{
+                id: customCalendar
                 anchors.fill: parent
                 onDateSelected:{
+                    calendar.selectedDate = selectedDate;
                     console.log(selectedDate);
                 }
             }

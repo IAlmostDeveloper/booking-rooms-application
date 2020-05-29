@@ -4,7 +4,7 @@
 CustomCalendarModel::CustomCalendarModel()
 {
     m_currentDate = QDate::currentDate();
-    qDebug() << m_currentDate;
+    connect(this, &CustomCalendarModel::bookedDaysChanged, &CustomCalendarModel::fillCalendar);
     fillCalendar();
 }
 
@@ -71,11 +71,19 @@ void CustomCalendarModel::fillCalendar()
 {
     int currentMonth = m_currentDate.month();
     int currentDayOfWeek = m_currentDate.dayOfWeek();
-    qDebug() << "Day of week:" << currentDayOfWeek;
+    clear();
     for(int i=0;i<currentDayOfWeek-1;i++)
         append(new CalendarDay(-1, false));
     while(m_currentDate.month()==currentMonth){
-        append(new CalendarDay(m_currentDate.day(), true));
+        bool state = true;
+        for(auto day : m_bookedDays){
+            QString currentDate = m_currentDate.toString("dd-MM-yy");
+            if(day==currentDate){
+                state=false;
+                break;
+            }
+        }
+        append(new CalendarDay(m_currentDate.day(), state));
         m_currentDate = m_currentDate.addDays(1);
     }
     m_currentDate = m_currentDate.addMonths(-1);
@@ -87,4 +95,15 @@ QHash<int, QByteArray> CustomCalendarModel::roleNames() const
     roles[CalendarRoles::Date] = "date";
     roles[CalendarRoles::Available] = "available";
     return roles;
+}
+
+QStringList CustomCalendarModel::bookedDays()
+{
+    return m_bookedDays;
+}
+
+void CustomCalendarModel::setBookedDays(QStringList bookedDays)
+{
+    m_bookedDays = bookedDays;
+    emit bookedDaysChanged();
 }

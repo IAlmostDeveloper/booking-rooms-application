@@ -53,7 +53,6 @@ void RoomsManager::getRoom(int id)
 {
     QString str = QString("http://localhost:8080/room?token=%1&room=%2")
             .arg(m_currentSession->token(), QString::number(id));
-    qDebug() << str;
     QUrl url(str);
     QNetworkRequest request(url);
     QNetworkReply *reply = m_net.get(request);
@@ -100,6 +99,34 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
         {
             emit addRoomSuccess();
             getParsedRoomsList(false);
+        }
+        reply->deleteLater();
+    });
+}
+
+void RoomsManager::getRoomBookedDays(int roomId)
+{
+    QString str = QString("http://localhost:8080/room-rents?token=%1&room=%2")
+            .arg(m_currentSession->token(), QString::number(roomId));
+    QUrl url(str);
+    QNetworkRequest request(url);
+    QNetworkReply *reply = m_net.get(request);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit roomBookedDaysReceiveError(reply->errorString());
+        else
+        {
+            QStringList bookedDays;
+            QString document = reply->readAll();
+            document.remove("[").remove("]").remove("\"").remove(" ").remove("(").remove(")");
+            QStringList parsed = document.split(",", Qt::SkipEmptyParts);
+            for(int i=3;i<parsed.length();i+=5){
+                bookedDays.append(parsed[i]);
+            }
+            qDebug() << document;
+            qDebug() << "parsed: " << parsed;
+            qDebug() << "days: " << bookedDays;
+            emit roomBookedDaysReceiveSuccess(bookedDays);
         }
         reply->deleteLater();
     });

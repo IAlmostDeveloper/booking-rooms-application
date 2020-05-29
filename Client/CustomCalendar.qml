@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import CustomCalendarModel 1.0
+import App 1.0
 
 Item {
     signal dateSelected(var selectedDate);
@@ -7,6 +8,13 @@ Item {
     property int cellSize : 40
     property var months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
         "Jul","Aug","Sep", "Oct", "Nov", "Dec"]
+
+    Connections{
+        target: App.roomsManager
+        onRoomBookedDaysReceiveSuccess:{
+            customCalendarModel.bookedDays = bookedDays;
+        }
+    }
 
     Column{
         anchors.fill: parent
@@ -94,11 +102,10 @@ Item {
                     MouseArea{
                         anchors.fill: parent
                         onClicked: {
-                            console.log(model.date);
                             if(model.available)
                                 selectedDate = model.date;
                             dateSelected(new Date(customCalendarModel.currentYear,
-                                                  customCalendarModel.currentMonth,model.date));
+                                                  customCalendarModel.currentMonth-1,model.date));
                         }
                     }
             }
