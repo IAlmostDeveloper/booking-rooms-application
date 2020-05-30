@@ -24,7 +24,6 @@ Item {
         ignoreUnknownSignals: enabled
 
         onRoomsDataReceived: {
-            console.log("rooms received")
         }
 
         onRoomsDataReceiveError: {
@@ -111,6 +110,7 @@ Item {
                                 id: id
                                 text: "Id: " + model.id
                             }
+
                             Text{
                                 id: available
                                 text: "Available: " + model.available
@@ -121,10 +121,15 @@ Item {
                             id: bookRoomButton
                             width: parent.width / 5
                             text: qsTr("Book")
-                            onClicked: {
-                                roomIdToBook = model.id;
-                                calendarDialog.open();
-                                App.roomsManager.getRoomBookedDays(model.id);
+                            enabled: model.available
+                            MouseArea{
+                                anchors.fill: parent
+                                cursorShape: available ? Qt.PointingHandCursor : Qt.ArrowCursor;
+                                onClicked: {
+                                    roomIdToBook = model.id;
+                                    calendarDialog.open();
+                                    App.roomsManager.getRoomBookedDays(model.id);
+                                }
                             }
                         }
                     }
@@ -151,7 +156,6 @@ Item {
                 anchors.fill: parent
                 onDateSelected:{
                     calendar.selectedDate = selectedDate;
-                    console.log(selectedDate);
                 }
             }
         }

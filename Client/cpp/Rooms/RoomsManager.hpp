@@ -22,6 +22,8 @@ public:
 
 signals:
     void roomsModelChanged();
+    void roomDataReceived(int id, const QString& hotel, const QString& description, bool available);
+    void roomDataReceiveError(const QString& error);
     void roomsDataReceived();
     void roomsDataReceiveError(const QString& error);
     void roomBookedDaysReceiveError(const QString& error);

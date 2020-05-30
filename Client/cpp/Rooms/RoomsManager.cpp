@@ -58,22 +58,22 @@ void RoomsManager::getRoom(int id)
     QNetworkReply *reply = m_net.get(request);
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
-            emit roomsDataReceiveError(reply->errorString());
+            emit roomDataReceiveError(reply->errorString());
         else
         {
             QString document = reply->readAll();
-            document.remove("[").remove("]").remove("\"");
-            qDebug() << document;
+            document.remove("[")
+                    .remove("]")
+                    .remove("\"");
+            qDebug() << "Room" << document;
             if(document!="[]"){
                 QStringList roomRaw = document.split(QRegExp(","), QString::SkipEmptyParts);
                 int id = roomRaw[0].toInt();
                 QString hotel = roomRaw[1];
                 QString description = roomRaw[2];
                 bool available = roomRaw[3].remove(" ")=="1" ? true : false;
-                for(auto i:roomRaw)
-                m_roomsModel->append(new RoomObject(id, hotel, description, available));
-            }
-            emit roomsDataReceived();
+                emit roomDataReceived(id, hotel, description, available);
+            }       
         }
         reply->deleteLater();
     });
@@ -118,14 +118,15 @@ void RoomsManager::getRoomBookedDays(int roomId)
         {
             QStringList bookedDays;
             QString document = reply->readAll();
-            document.remove("[").remove("]").remove("\"").remove(" ").remove("(").remove(")");
+            document.remove("[")
+                    .remove("]")
+                    .remove("\"")
+                    .remove(" ")
+                    .remove("(")
+                    .remove(")");
             QStringList parsed = document.split(",", Qt::SkipEmptyParts);
-            for(int i=3;i<parsed.length();i+=5){
+            for(int i=3;i<parsed.length();i+=5)
                 bookedDays.append(parsed[i]);
-            }
-            qDebug() << document;
-            qDebug() << "parsed: " << parsed;
-            qDebug() << "days: " << bookedDays;
             emit roomBookedDaysReceiveSuccess(bookedDays);
         }
         reply->deleteLater();

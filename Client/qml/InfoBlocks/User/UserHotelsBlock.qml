@@ -15,12 +15,9 @@ Item {
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
         onHotelsDataReceived: {
-            console.log("hotels received");
         }
 
         onHotelsDataReceiveError: {
-            errorDialog.setInformativeText(error);
-            errorDialog.open();
         }
     }
 
@@ -40,8 +37,7 @@ Item {
         id: hotelsListView
         width: parent.width
         height: parent.height - getHotelsButton.height
-        ScrollBar.vertical: ScrollBar{
-        }
+        ScrollBar.vertical: ScrollBar{}
 
         anchors.top: getHotelsButton.bottom
         anchors.left: parent.left
@@ -93,6 +89,7 @@ Item {
                                 text: "Available: " + model.available
                             }
                         }
+
                         Button{
                             id: viewHotelRoomsButton
                             text: "View rooms"
@@ -102,12 +99,9 @@ Item {
                                 viewRoomsRequest(name.text);
                             }
                         }
-                        }
-
-
                     }
                 }
-
+            }
         model: App.hotelsManager.hotelsModel
     }
 }

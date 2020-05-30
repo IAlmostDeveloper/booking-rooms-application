@@ -94,20 +94,22 @@ Item {
                 color: model.date!== -1 && model.available ? "#0AFF00"
                        : model.date !== -1 && !model.available ? "red" : "transparent"
                 border.color: selectedDate===model.date ? "black" : "transparent"
-                    Text {
-                        id: date
-                        text: model.date
-                        color: model.date === -1 ? "transparent" : "black"
-                    }
-                    MouseArea{
-                        anchors.fill: parent
-                        onClicked: {
-                            if(model.available)
-                                selectedDate = model.date;
+                Text {
+                    id: date
+                    text: model.date
+                    color: model.date === -1 ? "transparent" : "black"
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    onClicked: {
+                        if(model.available){
+                            selectedDate = model.date;
                             dateSelected(new Date(customCalendarModel.currentYear,
-                                                  customCalendarModel.currentMonth-1,model.date));
+                                              customCalendarModel.currentMonth-1,model.date));
                         }
                     }
+                    cursorShape: model.available ? Qt.PointingHandCursor : Qt.ArrowCursor;
+                }
             }
         }
 

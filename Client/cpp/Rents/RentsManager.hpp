@@ -24,6 +24,7 @@ signals:
     void rentsDataReceiveError(const QString& error);
     void addRentSuccess();
     void addRentError(const QString& error);
+
 private:
     QNetworkAccessManager m_net;
     Session* m_currentSession;

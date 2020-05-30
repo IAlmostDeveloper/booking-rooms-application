@@ -1,11 +1,9 @@
 #include "Customcalendarmodel.hpp"
-#include <QDebug>
 
 CustomCalendarModel::CustomCalendarModel()
 {
     m_currentDate = QDate::currentDate();
     connect(this, &CustomCalendarModel::bookedDaysChanged, &CustomCalendarModel::fillCalendar);
-    fillCalendar();
 }
 
 int CustomCalendarModel::currentMonth()
@@ -26,8 +24,6 @@ void CustomCalendarModel::setCurrentMonth(int month)
     if(month<m_currentDate.month())
         m_currentDate = m_currentDate.addMonths(month-m_currentDate.month());
     emit currentMonthChanged();
-    qDebug() << m_currentDate.month();
-    clear();
     fillCalendar();
 }
 

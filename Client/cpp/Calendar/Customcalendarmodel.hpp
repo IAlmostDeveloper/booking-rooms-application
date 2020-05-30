@@ -1,12 +1,11 @@
 #ifndef CUSTOMCALENDARMODEL_HPP
 #define CUSTOMCALENDARMODEL_HPP
 
-#include <QObject>
 #include <QAbstractListModel>
 #include <QList>
-#include "Calendarday.hpp"
 #include <QDate>
-#include "cpp/App.hpp"
+#include "Calendarday.hpp"
+#include "cpp/Rooms/RoomsManager.hpp"
 
 class CustomCalendarModel : public QAbstractListModel
 {
@@ -15,11 +14,12 @@ class CustomCalendarModel : public QAbstractListModel
     Q_PROPERTY(int currentYear READ currentYear WRITE setCurrentYear NOTIFY currentYearChanged)
     Q_PROPERTY(QStringList bookedDays READ bookedDays WRITE setBookedDays NOTIFY bookedDaysChanged)
 public:
-    explicit CustomCalendarModel();
     enum CalendarRoles{
         Date = 0,
         Available = 1
     };
+
+    explicit CustomCalendarModel();
     int rowCount(const QModelIndex& parent) const override;
     QVariant data(const QModelIndex& index, int role) const override;
     void append(CalendarDay *calendarDay);
@@ -34,6 +34,7 @@ public:
     int currentYear();
     void setCurrentMonth(int month);
     void setCurrentYear(int year);
+
 signals:
     void currentMonthChanged();
     void currentYearChanged();

@@ -10,10 +10,21 @@ Item {
         target: App.rentsManager
         ignoreUnknownSignals: enabled
         onRentsDataReceived: {
-            console.log("rents received");
         }
-        onRentsDataReceiveError: {
-            console.log("rents receive failed");
+        onRentsDataReceiveError: {        
+        }
+    }
+
+    Connections{
+        target: App.roomsManager
+        ignoreUnknownSignals: enabled
+        onRoomDataReceived:{
+            roomInfoDialogId.text = "Id: " + id;
+            roomInfoDialogDescription.text = "Description: " + description;
+            roomInfoDialogAvailable.text = "Available: " + (available ? "Yes" : "No");
+            roomInfoDialogHotel.text = "Hotel: " + hotel;
+        }
+        onRoomDataReceiveError:{
         }
     }
 
@@ -113,18 +124,22 @@ Item {
             spacing: 10
 
             Text{
+                id: roomInfoDialogId
                 text: "room.id"
             }
 
             Text{
+                id: roomInfoDialogDescription
                 text: "room.description"
             }
 
             Text{
+                id: roomInfoDialogAvailable
                 text: "room.available"
             }
 
             Text{
+                id: roomInfoDialogHotel
                 text: "room.hotel"
             }
         }
