@@ -14,8 +14,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += cpp/Auth/Authmanager.cpp \
-    Calendarday.cpp \
-    Customcalendarmodel.cpp \
+    cpp/Calendar/Calendarday.cpp \
+    cpp/Calendar/Customcalendarmodel.cpp \
     cpp/Hotels/Hotelobjdect.cpp \
     cpp/Hotels/HotelsManager.cpp \
     cpp/Rents/Rentobject.cpp \
@@ -43,9 +43,9 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Calendarday.hpp \
-    Customcalendarmodel.hpp \
     cpp/Auth/Authmanager.hpp \
+    cpp/Calendar/Calendarday.hpp \
+    cpp/Calendar/Customcalendarmodel.hpp \
     cpp/Hotels/Hotelobjdect.hpp \
     cpp/Hotels/HotelsManager.hpp \
     cpp/Rents/Rentobject.hpp \
@@ -59,7 +59,6 @@ HEADERS += \
     cpp/Hotels/Hotelsmodel.hpp
 
 DISTFILES += \
-    CustomCalendar.qml \
     Forms/LoginForm.qml \
     Forms/MainForm.qml \
     Forms/RegisterForm.qml \

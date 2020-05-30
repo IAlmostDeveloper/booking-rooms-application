@@ -2,7 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <cpp/App.hpp>
-#include "Customcalendarmodel.hpp"
+#include "cpp/Calendar/Customcalendarmodel.hpp"
 
 int main(int argc, char *argv[])
 {

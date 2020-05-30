@@ -5,7 +5,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Dialogs 1.3
 import Room 1.0
 import App 1.0
-import "../../../"
+import "../../Components/Calendar/"
 
 Item {
     property string currentHotelName: ""
