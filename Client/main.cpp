@@ -9,7 +9,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
-
     qmlRegisterUncreatableType<HotelObject>("Hotel", 1, 0, "HotelObject", "interface");
     qmlRegisterUncreatableType<RoomObject>("Room", 1, 0, "RoomObject", "interface");
     qmlRegisterUncreatableType<RentObject>("Rent", 1, 0, "RentObject", "interface");

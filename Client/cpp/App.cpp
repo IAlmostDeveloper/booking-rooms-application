@@ -1,5 +1,5 @@
 #include "App.hpp"
-
+#include <QSettings>
 
 
 App::App(QObject *parent)
@@ -61,6 +61,31 @@ void App::invalidateSession()
     m_session->setIsAdmin(false);
     m_session->setIsValid(false);
     emit sessionChanged();
+}
+
+QString App::getPreviousSessionLogin()
+{
+    return QSettings("ru.ialmostdeveloper", "Client").value("Login", "").toString();
+}
+
+QString App::getPreviousSessionPassword()
+{
+    return QSettings("ru.ialmostdeveloper", "Client").value("Password", "").toString();
+}
+
+void App::saveSessionLogin(const QString &login)
+{
+    QSettings("ru.ialmostdeveloper", "Client").setValue("Login", login);
+}
+
+void App::saveSessionPassword(const QString &password)
+{
+    QSettings("ru.ialmostdeveloper", "Client").setValue("Password", password);
+}
+
+void App::clearUserData()
+{
+    QSettings("ru.ialmostdeveloper", "Client").clear();
 }
 
 void App::setSession(Session *session)

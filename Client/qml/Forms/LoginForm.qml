@@ -10,6 +10,11 @@ Item{
         signInPassword.clear();
     }
 
+    Component.onCompleted: {
+        signInLogin.text = App.getPreviousSessionLogin();
+        signInPassword.text = App.getPreviousSessionPassword();
+    }
+
     signal successfulLogin();
     signal registerRequest();
 
@@ -74,7 +79,6 @@ Item{
                  Layout.alignment: Layout.Center
                  onClicked: {
                      App.authManager.auth(signInLogin.text, signInPassword.text);
-                     clearFields();
                  }
                  enabled: signInLogin.text.length >= 5 && signInPassword.text.length >= 5
              }
@@ -117,6 +121,9 @@ Item{
             onAuthFinished:{
                 console.log("Auth finished!");
                 console.log(token);
+                App.saveSessionLogin(signInLogin.text);
+                App.saveSessionPassword(signInPassword.text);
+                clearFields();
                 successfulLogin();
             }
             onAuthFailed: {

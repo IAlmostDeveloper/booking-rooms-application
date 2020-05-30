@@ -3,6 +3,7 @@ import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
 import QtQuick.Dialogs 1.1
 import "qml"
+import App 1.0
 
 Window {
     id: root
@@ -47,7 +48,8 @@ Window {
         }
 
         onLogoutRequest:{
-            currentForm = "SignIn";
+            App.clearUserData();
+            currentForm = "SignIn";           
         }
     }
 

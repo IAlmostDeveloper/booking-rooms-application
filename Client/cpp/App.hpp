@@ -33,6 +33,13 @@ public:
 
     Q_INVOKABLE void initSession(const QString& token, const QString& login, bool isAdmin);
     Q_INVOKABLE void invalidateSession();
+
+    Q_INVOKABLE QString getPreviousSessionLogin();
+    Q_INVOKABLE QString getPreviousSessionPassword();
+    Q_INVOKABLE void saveSessionLogin(const QString& login);
+    Q_INVOKABLE void saveSessionPassword(const QString& password);
+    Q_INVOKABLE void clearUserData();
+
 signals:
     void authManagerChanged();
     void sessionChanged();
