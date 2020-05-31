@@ -11,6 +11,20 @@ Item {
     width: parent.width
     height: parent.height
 
+    Timer{
+        id: startTimer
+        interval: 50
+        repeat: false
+        onTriggered: {
+            console.log("triggered");
+            App.hotelsManager.getParsedHotelsList();
+        }
+    }
+
+    Component.onCompleted: {
+        startTimer.start();
+    }
+
     Connections{
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
@@ -21,25 +35,11 @@ Item {
         }
     }
 
-    Button {
-        id: getHotelsButton
-        text: qsTr("Get hotels list")
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: parent.width / 2.5
-        height: 50
-
-        onClicked: {
-            App.hotelsManager.getParsedHotelsList();
-        }
-    }
-
     ListView {
         id: hotelsListView
         width: parent.width
-        height: parent.height - getHotelsButton.height
+        height: parent.height
         ScrollBar.vertical: ScrollBar{}
-
-        anchors.top: getHotelsButton.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         delegate: Item {

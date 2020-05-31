@@ -19,6 +19,10 @@ Item {
         App.roomsManager.getParsedRoomsList(onlyAvailableCheckbox.checked, hotel);
     }
 
+    Component.onCompleted: {
+        getRoomsList();
+    }
+
     Connections{
         target: App.roomsManager
         ignoreUnknownSignals: enabled

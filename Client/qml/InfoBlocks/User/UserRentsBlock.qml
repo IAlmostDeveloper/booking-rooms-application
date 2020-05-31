@@ -6,6 +6,11 @@ import Rent 1.0
 import Room 1.0
 
 Item {
+
+    Component.onCompleted: {
+        App.rentsManager.getUserRents(App.session.login);
+    }
+
     Connections{
         target: App.rentsManager
         ignoreUnknownSignals: enabled
@@ -41,25 +46,14 @@ Item {
         anchors.top: userNameText.bottom
     }
 
-    Button{
-        id: getRentsButton
-        anchors.top: rentsBlockText.bottom
-        text: "Get my rents"
-        onClicked: {
-            App.rentsManager.getUserRents(App.session.login);
-        }
-    }
-
     ListView {
         id: rentsListView
-        height: parent.height - rentsBlockText.height - userNameText.height - getRentsButton.height
+        width: parent.width
+        height: parent.height - rentsBlockText.height - userNameText.height
         ScrollBar.vertical: ScrollBar{
 
         }
-
-        anchors.top: getRentsButton.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.top: rentsBlockText.bottom
         delegate: Item {
                 id: item
                 anchors.left: parent.left
