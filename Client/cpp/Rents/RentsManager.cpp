@@ -47,6 +47,41 @@ void RentsManager::getUserRents(const QString &login)
     });
 }
 
+void RentsManager::getAllRents()
+{
+    QString uri = "rents";
+
+    QString str = QString("http://localhost:8080/rents?token=%1")
+            .arg(m_currentSession->token());
+    QUrl url(str);
+    QNetworkRequest request(url);
+    QNetworkReply *reply = m_net.get(request);
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit rentsDataReceiveError(reply->errorString());
+        else
+        {
+            m_rentsModel->clear();
+            QString document = reply->readAll();
+            document.remove("]");
+            QStringList raw = document.split(QRegExp("[[]"), QString::SkipEmptyParts);
+            if(raw.length()!=0)
+                for(auto i : raw)
+                {
+                    QStringList roomRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
+                    int id = roomRaw[0].toInt();
+                    int roomId = roomRaw[1].toInt();
+                    int userId = roomRaw[2].toInt();
+                    QString fromDate = roomRaw[3].remove("\"");
+                    QString toDate = roomRaw[4].remove("\"");
+                    m_rentsModel->append(new RentObject(id, roomId, userId, fromDate, toDate));
+                }
+            emit rentsDataReceived();
+        }
+        reply->deleteLater();
+    });
+}
+
 void RentsManager::addUserRent(int roomId, const QString& user, const QString &fromDate, const QString &toDate)
 {
     QUrl url(QString("http://localhost:8080/add/rent"));

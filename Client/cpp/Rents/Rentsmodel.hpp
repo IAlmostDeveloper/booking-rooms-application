@@ -14,6 +14,7 @@ public:
         FromDate = 3,
         ToDate = 4
     };
+
     explicit RentsModel();
     Q_INVOKABLE RentObject* getRent(int index);
     int rowCount(const QModelIndex& parent) const override;
