@@ -104,6 +104,29 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
     });
 }
 
+void RoomsManager::deleteRoom(int id)
+{
+    QUrl url(QString("http://localhost:8080/delete/room"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject body;
+    body["sessionToken"] = m_currentSession->token();
+    body["id"] = id;
+    QByteArray bodyData = QJsonDocument(body).toJson();
+    QNetworkReply *reply = m_net.post(request, bodyData);
+
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit deleteRoomError(reply->errorString());
+        else
+        {
+            emit deleteRoomSuccess();
+            getParsedRoomsList(false);
+        }
+        reply->deleteLater();
+    });
+}
+
 void RoomsManager::getRoomBookedDays(int roomId)
 {
     QString str = QString("http://localhost:8080/room-rents?token=%1&room=%2")

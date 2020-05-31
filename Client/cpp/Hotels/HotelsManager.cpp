@@ -70,6 +70,28 @@ void HotelsManager::addHotelToDatabase(const QString& name, const QString& addre
     });
 }
 
+void HotelsManager::deleteHotel(int id)
+{
+    QUrl url(QString("http://localhost:8080/delete/hotel"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject body;
+    body["sessionToken"] = m_currentSession->token();
+    body["id"] = id;
+    QByteArray bodyData = QJsonDocument(body).toJson();
+    QNetworkReply *reply = m_net.post(request, bodyData);
+
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit deleteHotelError(reply->errorString());
+        else{
+            emit deleteHotelSuccess();
+            getParsedHotelsList();
+        }
+        reply->deleteLater();
+    });
+}
+
 HotelsModel *HotelsManager::hotelsModel()
 {
     return m_hotelsModel;

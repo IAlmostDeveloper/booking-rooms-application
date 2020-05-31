@@ -83,7 +83,7 @@ Item {
                             width: parent.width / 10
                             text: "Delete"
                             onClicked: {
-
+                                App.roomsManager.deleteRoom(model.id);
                             }
                         }
                     }

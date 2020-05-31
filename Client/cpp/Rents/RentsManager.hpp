@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE void getAllRents();
     Q_INVOKABLE void addUserRent(int roomId, const QString& user,
                                  const QString &fromDate, const QString &toDate);
+    Q_INVOKABLE void deleteRent(int id);
     RentsModel* rentsModel();
     void setRentsModel(RentsModel* rentsModel);
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
@@ -25,6 +26,8 @@ signals:
     void rentsDataReceiveError(const QString& error);
     void addRentSuccess();
     void addRentError(const QString& error);
+    void deleteRentSuccess();
+    void deleteRentError(const QString& error);
 
 private:
     QNetworkAccessManager m_net;

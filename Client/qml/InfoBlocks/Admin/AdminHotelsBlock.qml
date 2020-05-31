@@ -97,7 +97,7 @@ Item {
                             width: parent.width / 10
                             text: "Delete"
                             onClicked: {
-
+                                App.hotelsManager.deleteHotel(model.id);
                             }
                         }
                     }

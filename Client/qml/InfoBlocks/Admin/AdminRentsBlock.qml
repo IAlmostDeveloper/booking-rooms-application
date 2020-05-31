@@ -100,7 +100,7 @@ Item {
                             width: parent.width / 10
                             text: "Delete"
                             onClicked: {
-
+                                App.rentsManager.deleteRent(model.id);
                             }
                         }
                     }

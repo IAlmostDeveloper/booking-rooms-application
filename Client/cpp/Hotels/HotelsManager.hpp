@@ -14,6 +14,8 @@ public:
     Q_INVOKABLE void getParsedHotelsList();
     Q_INVOKABLE void addHotelToDatabase(const QString& name, const QString& address,
                                         const QString& description, bool available);
+    Q_INVOKABLE void deleteHotel(int id);
+
     HotelsModel* hotelsModel();
     void setHotelsModel(HotelsModel* hotelsModel);
     void setNewSession(const QString& token, const QString& login, bool isAdmin);
@@ -24,6 +26,8 @@ signals:
     void hotelsDataReceiveError(const QString& error);
     void addHotelSuccess();
     void addHotelError(const QString& error);
+    void deleteHotelSuccess();
+    void deleteHotelError(const QString& error);
 
 private:
     QNetworkAccessManager m_net;

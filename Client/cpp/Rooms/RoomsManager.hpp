@@ -9,12 +9,14 @@ class RoomsManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(RoomsModel* roomsModel READ roomsModel WRITE setRoomsModel NOTIFY roomsModelChanged)
+
 public:
     explicit RoomsManager(Session* session = nullptr);
     Q_INVOKABLE void getParsedRoomsList(bool isOnlyAvailable, const QString& hotel = "");
     Q_INVOKABLE void getRoom(int id);
     Q_INVOKABLE void addRoomToDatabase(const QString& hotel,
                                        const QString& description, bool available);
+    Q_INVOKABLE void deleteRoom(int id);
     Q_INVOKABLE void getRoomBookedDays(int roomId);
     RoomsModel* roomsModel();
     void setRoomsModel(RoomsModel* roomsModel);
@@ -30,6 +32,8 @@ signals:
     void roomBookedDaysReceiveSuccess(QStringList bookedDays);
     void addRoomSuccess();
     void addRoomError(const QString& error);
+    void deleteRoomSuccess();
+    void deleteRoomError(const QString& error);
 
 private:
     QNetworkAccessManager m_net;

@@ -107,6 +107,28 @@ void RentsManager::addUserRent(int roomId, const QString& user, const QString &f
     });
 }
 
+void RentsManager::deleteRent(int id)
+{
+    QUrl url(QString("http://localhost:8080/delete/rent"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject body;
+    body["sessionToken"] = m_currentSession->token();
+    body["id"] = id;
+    QByteArray bodyData = QJsonDocument(body).toJson();
+    QNetworkReply *reply = m_net.post(request, bodyData);
+
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit deleteRentError(reply->errorString());
+        else{
+            emit deleteRentSuccess();
+            getAllRents();
+        }
+        reply->deleteLater();
+    });
+}
+
 RentsModel *RentsManager::rentsModel()
 {
     return m_rentsModel;
