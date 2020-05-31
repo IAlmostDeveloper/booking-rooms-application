@@ -197,7 +197,11 @@ Item {
             }
         }
         onAccepted: {
-//            App.rentsManager.editRent(editingRentId, )
+            App.rentsManager.editRent(editingRentId,
+                                      editRentRoomIdField.text,
+                                      editRentUserIdField.text,
+                                      editRentFromDateField.text,
+                                      editRentToDateField.text)
         }
     }
 }

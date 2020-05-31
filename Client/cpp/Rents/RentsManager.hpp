@@ -15,7 +15,7 @@ public:
     Q_INVOKABLE void getAllRents();
     Q_INVOKABLE void addUserRent(int roomId, const QString& user,
                                  const QString &fromDate, const QString &toDate);
-    Q_INVOKABLE void editRent(int id,int roomId, const QString& user,
+    Q_INVOKABLE void editRent(int id,int roomId, int userId,
                               const QString &fromDate, const QString &toDate );
     Q_INVOKABLE void deleteRent(int id);
     RentsModel* rentsModel();

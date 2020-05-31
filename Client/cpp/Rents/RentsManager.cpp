@@ -107,7 +107,7 @@ void RentsManager::addUserRent(int roomId, const QString& user, const QString &f
     });
 }
 
-void RentsManager::editRent(int id, int roomId, const QString &user, const QString &fromDate, const QString &toDate)
+void RentsManager::editRent(int id, int roomId, int userId, const QString &fromDate, const QString &toDate)
 {
     QUrl url(QString("http://localhost:8080/update/rent"));
     QNetworkRequest request(url);
@@ -116,7 +116,7 @@ void RentsManager::editRent(int id, int roomId, const QString &user, const QStri
     body["sessionToken"] = m_currentSession->token();
     body["id"] = id;
     body["roomId"] = roomId;
-    body["user"] = user;
+    body["userId"] = userId;
     body["fromDate"] = fromDate;
     body["toDate"] = toDate;
 
