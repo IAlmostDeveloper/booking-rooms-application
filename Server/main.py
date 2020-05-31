@@ -104,7 +104,9 @@ class requestHandler(BaseHTTPRequestHandler):
             if userSessionTokens.__contains__(jsonresult["sessionToken"]) \
                     or adminSessionTokens.__contains__(jsonresult["sessionToken"]):
                 self.send_response(200)
-                if self.path.endswith('/rent'):
+                if self.path.endswith('/user-rent'):
+                    addUserRent(jsonresult)
+                elif self.path.endswith('/rent'):
                     addRent(jsonresult)
                 else:
                     self.send_error(403)
@@ -179,8 +181,11 @@ def addHotel(jsonresult):
 def addRoom(jsonresult):
     DatabaseManager.addRoom(jsonresult["hotel"], jsonresult["description"], jsonresult["available"])
 
-
 def addRent(jsonresult):
+    DatabaseManager.addRent(jsonresult["roomId"], jsonresult["userId"],
+                            jsonresult["fromDate"], jsonresult["toDate"])
+
+def addUserRent(jsonresult):
     userId = DatabaseManager.getUserId(jsonresult["user"])[0]
     DatabaseManager.addRent(jsonresult["roomId"], userId,
                             jsonresult["fromDate"], jsonresult["toDate"])

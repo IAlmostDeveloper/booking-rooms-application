@@ -15,9 +15,12 @@ public:
     Q_INVOKABLE void getAllRents();
     Q_INVOKABLE void addUserRent(int roomId, const QString& user,
                                  const QString &fromDate, const QString &toDate);
+    Q_INVOKABLE void addRent(int roomId, int userId,
+                             const QString &fromDate, const QString &toDate);
     Q_INVOKABLE void editRent(int id,int roomId, int userId,
                               const QString &fromDate, const QString &toDate );
     Q_INVOKABLE void deleteRent(int id);
+
     RentsModel* rentsModel();
     void setRentsModel(RentsModel* rentsModel);
     void setNewSession(const QString& token, const QString& login, bool isAdmin);

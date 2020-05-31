@@ -156,7 +156,45 @@ Item {
     Dialog{
         id: addRentDialog
         standardButtons: StandardButton.Ok | StandardButton.Cancel
+        Column{
+            Text{
+                text: "roomId"
+            }
 
+            TextField{
+                id: addRentRoomIdField
+            }
+
+            Text{
+                text: "userId"
+            }
+
+            TextField{
+                id: addRentUserIdField
+            }
+
+            Text{
+                text: "fromDate"
+            }
+
+            TextField{
+                id: addRentFromDateField
+            }
+
+            Text{
+                text: "toDate"
+            }
+
+            TextField{
+                id: addRentToDateField
+            }
+    }
+        onAccepted: {
+            App.rentsManager.addRent(addRentRoomIdField.text,
+                                     addRentUserIdField.text,
+                                     addRentFromDateField.text,
+                                     addRentToDateField.text)
+        }
     }
 
     Dialog{
