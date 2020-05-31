@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.3
 import App 1.0
 
 Item {
+    property int editingHotelId : -1
     id: adminHotelsBlock
     state: adminHotelsBlock.width >= adminHotelsBlock.height * 1.75 ? "Landscape" : "Portrait"
 
@@ -88,7 +89,12 @@ Item {
                             width: parent.width / 10
                             text: "Edit"
                             onClicked: {
-
+                                editingHotelId = model.id;
+                                editHotelAddressField.text = model.address;
+                                editHotelDescriptionField.text = model.description;
+                                editHotelNameField.text = model.name;
+                                editHotelAvailableField.checked = model.available;
+                                editHotelDialog.open();
                             }
                         }
 
@@ -167,6 +173,59 @@ Item {
                                                                hotelAddressField.text,
                                                                hotelDescriptionField.text,
                                                                hotelAvailableField.currentText=="Yes")
+        }
+    }
+
+    Dialog{
+        id: editHotelDialog
+        width: 305
+        height: 335
+        title: qsTr("Add hotel")
+        standardButtons: StandardButton.Cancel | StandardButton.Ok
+        Column{
+            id: editFieldsLayout
+            anchors{
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+            spacing: 10
+            Text{
+                text: qsTr("Name")
+            }
+
+            TextField{
+              id: editHotelNameField
+            }
+
+            Text{
+                text: qsTr("Address")
+            }
+
+            TextField{
+              id: editHotelAddressField
+            }
+            Text{
+                text: qsTr("Available")
+            }
+
+            CheckBox{
+                id: editHotelAvailableField
+
+            }
+
+            Text{
+                text: qsTr("Description")
+            }
+
+            TextField{
+              id: editHotelDescriptionField
+            }
+        }
+        onAccepted: {
+            App.hotelsManager.editHotel(editingHotelId, editHotelNameField.text,
+                                       editHotelAddressField.text,
+                                       editHotelDescriptionField.text,
+                                       editHotelAvailableField.checked)
         }
     }
 }

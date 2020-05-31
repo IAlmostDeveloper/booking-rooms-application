@@ -14,6 +14,8 @@ public:
     Q_INVOKABLE void getParsedHotelsList();
     Q_INVOKABLE void addHotelToDatabase(const QString& name, const QString& address,
                                         const QString& description, bool available);
+    Q_INVOKABLE void editHotel(int id, const QString& name, const QString& address,
+                               const QString& description, bool available);
     Q_INVOKABLE void deleteHotel(int id);
 
     HotelsModel* hotelsModel();
@@ -26,6 +28,8 @@ signals:
     void hotelsDataReceiveError(const QString& error);
     void addHotelSuccess();
     void addHotelError(const QString& error);
+    void editHotelSuccess();
+    void editHotelError(const QString& error);
     void deleteHotelSuccess();
     void deleteHotelError(const QString& error);
 

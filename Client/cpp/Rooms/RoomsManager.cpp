@@ -38,8 +38,8 @@ void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel
                 {
                     QStringList roomRaw = i.split(QRegExp(","), QString::SkipEmptyParts);
                     int id = roomRaw[0].toInt();
-                    QString hotel = roomRaw[1].remove("\"");
-                    QString description = roomRaw[2].remove("\"").remove("]");
+                    QString hotel = roomRaw[1].remove("\"").remove(0, 1);
+                    QString description = roomRaw[2].remove("\"").remove("]").remove(0, 1);
                     bool available = roomRaw[3].remove(" ").remove("]")=="1" ? true : false;
                     m_roomsModel->append(new RoomObject(id, hotel, description, available));
                 }
@@ -98,6 +98,32 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
         else
         {
             emit addRoomSuccess();
+            getParsedRoomsList(false);
+        }
+        reply->deleteLater();
+    });
+}
+
+void RoomsManager::editRoom(int id, const QString &hotel, const QString &description, bool available)
+{
+    QUrl url(QString("http://localhost:8080/update/room"));
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    QJsonObject body;
+    body["sessionToken"] = m_currentSession->token();
+    body["id"] = id;
+    body["hotel"] = hotel;
+    body["description"] = description;
+    body["available"] = available ? 1 : 0;
+    QByteArray bodyData = QJsonDocument(body).toJson();
+    QNetworkReply *reply = m_net.post(request, bodyData);
+
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+        if(reply->error()!=QNetworkReply::NoError)
+            emit editRoomError(reply->errorString());
+        else
+        {
+            emit editRoomSuccess();
             getParsedRoomsList(false);
         }
         reply->deleteLater();

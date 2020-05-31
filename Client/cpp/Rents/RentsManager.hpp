@@ -15,6 +15,8 @@ public:
     Q_INVOKABLE void getAllRents();
     Q_INVOKABLE void addUserRent(int roomId, const QString& user,
                                  const QString &fromDate, const QString &toDate);
+    Q_INVOKABLE void editRent(int id,int roomId, const QString& user,
+                              const QString &fromDate, const QString &toDate );
     Q_INVOKABLE void deleteRent(int id);
     RentsModel* rentsModel();
     void setRentsModel(RentsModel* rentsModel);
@@ -26,6 +28,8 @@ signals:
     void rentsDataReceiveError(const QString& error);
     void addRentSuccess();
     void addRentError(const QString& error);
+    void editRentSuccess();
+    void editRentError(const QString& error);
     void deleteRentSuccess();
     void deleteRentError(const QString& error);
 

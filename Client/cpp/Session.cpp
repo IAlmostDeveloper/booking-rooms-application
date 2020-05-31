@@ -28,7 +28,6 @@ QString Session::login()
 
 bool Session::isAdmin()
 {
-    qDebug() << Q_FUNC_INFO << m_isAdmin;
     return m_isAdmin;
 }
 

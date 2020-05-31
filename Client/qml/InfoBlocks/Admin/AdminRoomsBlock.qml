@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.3
 import App 1.0
 
 Item {
+    property int editingRoomId: -1
     id: adminRoomsBlock
     Component.onCompleted: {
         App.roomsManager.getParsedRoomsList(false, "");
@@ -74,7 +75,11 @@ Item {
                             width: parent.width / 10
                             text: "Edit"
                             onClicked: {
-
+                                editingRoomId = model.id;
+                                editRoomHotelNameField.text = model.hotel;
+                                editRoomAvailableField.checked = model.available;
+                                editRoomDescriptionField.text = model.description;
+                                editRoomDialog.open();
                             }
                         }
 
@@ -142,6 +147,50 @@ Item {
             ComboBox{
                 id: roomAvailableField
                 model: ["Yes", "No"]
+            }
+        }
+    }
+
+    Dialog{
+        id: editRoomDialog
+        width: 400
+        height: 400
+        standardButtons: StandardButton.Cancel | StandardButton.Ok
+        onAccepted: {
+            App.roomsManager.editRoom(editingRoomId, editRoomHotelNameField.text,
+                                         editRoomDescriptionField.text,
+                                         editRoomAvailableField.checked);
+        }
+        Column{
+            id: editFieldsLayout
+            anchors{
+                bottom: parent.bottom
+                horizontalCenter: parent.horizontalCenter
+            }
+            Text{
+                text: qsTr("Hotel name")
+            }
+
+            TextField{
+              id: editRoomHotelNameField
+              text: ""
+            }
+
+            Text{
+                text: qsTr("Description")
+            }
+
+            TextField{
+              id: editRoomDescriptionField
+              text: ""
+            }
+
+            Text{
+                text: qsTr("Available")
+            }
+
+            CheckBox{
+                id: editRoomAvailableField
             }
         }
     }

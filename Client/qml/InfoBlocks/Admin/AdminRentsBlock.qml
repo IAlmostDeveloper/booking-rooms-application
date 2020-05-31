@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.3
 import App 1.0
 
 Item {
-
+    property int editingRentId : -1
     Component.onCompleted: {
         App.rentsManager.getAllRents();
     }
@@ -91,7 +91,12 @@ Item {
                             width: parent.width / 10
                             text: "Edit"
                             onClicked: {
-
+                                editingRentId = model.id;
+                                editRentRoomIdField.text = model.roomId;
+                                editRentUserIdField.text = model.userId;
+                                editRentFromDateField.text = model.fromDate;
+                                editRentToDateField.text = model.toDate;
+                                editRentDialog.open();
                             }
                         }
 
@@ -110,6 +115,16 @@ Item {
         model: App.rentsManager.rentsModel
     }
 
+    Button{
+        id: addRentButton
+        text: "Add rent"
+        width: parent.width / 6
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.top: rentsListView.bottom
+        onClicked: {
+            addRentDialog.open();
+        }
+    }
     Dialog{
         id: roomInfoDialog
         title: qsTr("Selected room")
@@ -138,20 +153,51 @@ Item {
         }
     }
 
-    Button{
-        id: addRentButton
-        text: "Add rent"
-        width: parent.width / 6
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.top: rentsListView.bottom
-        onClicked: {
-            addRentDialog.open();
-        }
-    }
-
     Dialog{
         id: addRentDialog
         standardButtons: StandardButton.Ok | StandardButton.Cancel
 
+    }
+
+    Dialog{
+        id: editRentDialog
+        standardButtons: StandardButton.Ok | StandardButton.Cancel
+
+        Column{
+            Text{
+                text: "roomId"
+            }
+
+            TextField{
+                id: editRentRoomIdField
+            }
+
+            Text{
+                text: "userId"
+            }
+
+            TextField{
+                id: editRentUserIdField
+            }
+
+            Text{
+                text: "fromDate"
+            }
+
+            TextField{
+                id: editRentFromDateField
+            }
+
+            Text{
+                text: "toDate"
+            }
+
+            TextField{
+                id: editRentToDateField
+            }
+        }
+        onAccepted: {
+//            App.rentsManager.editRent(editingRentId, )
+        }
     }
 }

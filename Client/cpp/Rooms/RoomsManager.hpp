@@ -16,6 +16,8 @@ public:
     Q_INVOKABLE void getRoom(int id);
     Q_INVOKABLE void addRoomToDatabase(const QString& hotel,
                                        const QString& description, bool available);
+    Q_INVOKABLE void editRoom(int id, const QString& hotel,
+                              const QString& description, bool available);
     Q_INVOKABLE void deleteRoom(int id);
     Q_INVOKABLE void getRoomBookedDays(int roomId);
     RoomsModel* roomsModel();
@@ -32,6 +34,8 @@ signals:
     void roomBookedDaysReceiveSuccess(QStringList bookedDays);
     void addRoomSuccess();
     void addRoomError(const QString& error);
+    void editRoomSuccess();
+    void editRoomError(const QString& error);
     void deleteRoomSuccess();
     void deleteRoomError(const QString& error);
 
