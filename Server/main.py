@@ -10,7 +10,7 @@ userSessionTokens = []
 
 class requestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        parsed = re.split(', |=|\\?|/|&|', self.path)
+        parsed = re.split('=|\?|/|&', self.path)
         parsed.remove('')
         if not parsed.__contains__('token'):
             self.send_error(403)
