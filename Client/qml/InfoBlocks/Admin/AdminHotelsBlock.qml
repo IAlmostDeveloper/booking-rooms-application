@@ -16,7 +16,13 @@ Item {
     Connections{
         target: App.hotelsManager
         ignoreUnknownSignals: enabled
+        onHotelsDataReceived: {
+        }
 
+        onHotelsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
         onAddHotelSuccess: {
             console.log("added successfully");
         }

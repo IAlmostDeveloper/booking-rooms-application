@@ -20,6 +20,19 @@ Item {
             roomInfoDialogHotel.text = "Hotel: " + hotel;
         }
         onRoomDataReceiveError:{
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
+    }
+
+    Connections{
+        target: App.rentsManager
+        ignoreUnknownSignals: enabled
+        onRentsDataReceived: {
+        }
+        onRentsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
         }
     }
 

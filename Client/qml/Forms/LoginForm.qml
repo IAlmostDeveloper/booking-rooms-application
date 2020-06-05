@@ -119,16 +119,12 @@ Item{
             target: App.authManager
             ignoreUnknownSignals: enabled
             onAuthFinished:{
-                console.log("Auth finished!");
-                console.log(token);
                 App.saveSessionLogin(signInLogin.text);
                 App.saveSessionPassword(signInPassword.text);
                 clearFields();
                 successfulLogin();
             }
             onAuthFailed: {
-                console.log("Auth failed!");
-                console.log(error);
                 errorDialog.setInformativeText(error);
                 errorDialog.open();
             }

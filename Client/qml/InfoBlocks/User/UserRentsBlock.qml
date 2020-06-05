@@ -16,7 +16,9 @@ Item {
         ignoreUnknownSignals: enabled
         onRentsDataReceived: {
         }
-        onRentsDataReceiveError: {        
+        onRentsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
         }
     }
 

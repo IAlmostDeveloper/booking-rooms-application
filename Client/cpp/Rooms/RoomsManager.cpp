@@ -65,7 +65,6 @@ void RoomsManager::getRoom(int id)
             document.remove("[")
                     .remove("]")
                     .remove("\"");
-            qDebug() << "Room" << document;
             if(document!="[]"){
                 QStringList roomRaw = document.split(QRegExp(","), QString::SkipEmptyParts);
                 int id = roomRaw[0].toInt();

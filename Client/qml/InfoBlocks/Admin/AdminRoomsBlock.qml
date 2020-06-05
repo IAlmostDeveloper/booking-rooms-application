@@ -14,7 +14,13 @@ Item {
     Connections{
         target: App.roomsManager
         ignoreUnknownSignals: enabled
+        onRoomsDataReceived: {
+        }
 
+        onRoomsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
+        }
         onAddRoomSuccess: {
             console.log("added successfully");
         }

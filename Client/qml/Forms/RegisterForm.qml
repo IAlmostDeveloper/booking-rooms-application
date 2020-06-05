@@ -136,12 +136,9 @@ Item {
          target: App.authManager
          ignoreUnknownSignals: enabled
          onRegFinished:{
-             console.log("Reg finished!");
              successfulRegistration();
          }
          onRegFailed: {
-             console.log("Reg failed!");
-             console.log(error);
              errorDialog.setInformativeText(error);
              errorDialog.open();
          }

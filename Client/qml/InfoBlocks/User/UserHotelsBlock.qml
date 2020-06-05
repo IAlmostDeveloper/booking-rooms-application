@@ -16,7 +16,6 @@ Item {
         interval: 50
         repeat: false
         onTriggered: {
-            console.log("triggered");
             App.hotelsManager.getParsedHotelsList();
         }
     }
@@ -32,6 +31,8 @@ Item {
         }
 
         onHotelsDataReceiveError: {
+            errorDialog.setInformativeText(error);
+            errorDialog.open();
         }
     }
 
@@ -95,7 +96,6 @@ Item {
                             text: "View rooms"
                             width: parent.width / 7
                             onClicked: {
-                                console.log("view rooms");
                                 viewRoomsRequest(name.text);
                             }
                         }

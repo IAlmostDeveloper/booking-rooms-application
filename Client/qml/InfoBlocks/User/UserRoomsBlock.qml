@@ -169,6 +169,7 @@ Item {
                          App.session.login,
                          Qt.formatDate(calendar.selectedDate, "dd-MM-yy"),
                          Qt.formatDate(calendar.selectedDate, "dd-MM-yy"))
+            customCalendar.selectedDate = 0;
         }
     }
 }
