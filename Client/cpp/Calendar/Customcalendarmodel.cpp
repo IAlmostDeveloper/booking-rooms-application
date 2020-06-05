@@ -66,6 +66,7 @@ void CustomCalendarModel::clear()
 void CustomCalendarModel::fillCalendar()
 {
     int currentMonth = m_currentDate.month();
+    m_currentDate = m_currentDate.addDays(-m_currentDate.day()+1);
     int currentDayOfWeek = m_currentDate.dayOfWeek();
     clear();
     for(int i=0;i<currentDayOfWeek-1;i++)
