@@ -84,11 +84,11 @@ void RentsManager::getAllRents()
 
 void RentsManager::addUserRent(int roomId, const QString& user, const QString &fromDate, const QString &toDate)
 {
-    QUrl url(QString("http://localhost:8080/add/user-rent"));
+    QUrl url(QString("http://localhost:8080/user-rent"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["roomId"] = roomId;
     body["user"] = user;
     body["fromDate"] = fromDate;
@@ -109,11 +109,11 @@ void RentsManager::addUserRent(int roomId, const QString& user, const QString &f
 
 void RentsManager::addRent(int roomId, int userId, const QString &fromDate, const QString &toDate)
 {
-    QUrl url(QString("http://localhost:8080/add/rent"));
+    QUrl url(QString("http://localhost:8080/rent"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["roomId"] = roomId;
     body["userId"] = userId;
     body["fromDate"] = fromDate;
@@ -135,11 +135,11 @@ void RentsManager::addRent(int roomId, int userId, const QString &fromDate, cons
 
 void RentsManager::editRent(int id, int roomId, int userId, const QString &fromDate, const QString &toDate)
 {
-    QUrl url(QString("http://localhost:8080/update/rent"));
+    QUrl url(QString("http://localhost:8080/rent"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     body["roomId"] = roomId;
     body["userId"] = userId;
@@ -147,7 +147,7 @@ void RentsManager::editRent(int id, int roomId, int userId, const QString &fromD
     body["toDate"] = toDate;
 
     QByteArray bodyData = QJsonDocument(body).toJson();
-    QNetworkReply *reply = m_net.post(request, bodyData);
+    QNetworkReply *reply = m_net.put(request, bodyData);
 
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
@@ -166,7 +166,7 @@ void RentsManager::deleteRent(int id)
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);

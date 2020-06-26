@@ -80,11 +80,11 @@ void RoomsManager::getRoom(int id)
 
 void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &description, bool available)
 {
-    QUrl url(QString("http://localhost:8080/add/room"));
+    QUrl url(QString("http://localhost:8080/room"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["hotel"] = hotel;
     body["description"] = description;
     body["available"] = available ? 1 : 0;
@@ -105,17 +105,17 @@ void RoomsManager::addRoomToDatabase(const QString& hotel, const QString &descri
 
 void RoomsManager::editRoom(int id, const QString &hotel, const QString &description, bool available)
 {
-    QUrl url(QString("http://localhost:8080/update/room"));
+    QUrl url(QString("http://localhost:8080/room"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     body["hotel"] = hotel;
     body["description"] = description;
     body["available"] = available ? 1 : 0;
     QByteArray bodyData = QJsonDocument(body).toJson();
-    QNetworkReply *reply = m_net.post(request, bodyData);
+    QNetworkReply *reply = m_net.put(request, bodyData);
 
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
@@ -135,7 +135,7 @@ void RoomsManager::deleteRoom(int id)
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);

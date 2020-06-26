@@ -25,13 +25,13 @@ void AuthManager::auth(const QString &login, const QString &password){
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
 
-    QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
+    QObject::connect(reply, &QNetworkReply::finished, [this, reply, login](){
         if(reply->error()!=QNetworkReply::NoError)
             emit authFailed(reply->errorString());
         else{
             QJsonDocument document = QJsonDocument::fromJson(reply->readAll());
             emit authFinished(document["token"].toString(),
-                    document["login"].toString(),document["isAdmin"].toBool());
+                    login, document["isAdmin"].toBool());
         }
         reply->deleteLater();
         setAuthProcessing(false);

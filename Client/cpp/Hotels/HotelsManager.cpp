@@ -47,11 +47,11 @@ void HotelsManager::getParsedHotelsList()
 void HotelsManager::addHotelToDatabase(const QString& name, const QString& address,
                                      const QString& description, bool available)
 {
-    QUrl url(QString("http://localhost:8080/add/hotel"));
+    QUrl url(QString("http://localhost:8080/hotel"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["name"] = name;
     body["address"] = address;
     body["description"] = description;
@@ -72,18 +72,18 @@ void HotelsManager::addHotelToDatabase(const QString& name, const QString& addre
 
 void HotelsManager::editHotel(int id, const QString &name, const QString &address, const QString &description, bool available)
 {
-    QUrl url(QString("http://localhost:8080/update/hotel"));
+    QUrl url(QString("http://localhost:8080/hotel"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     body["name"] = name;
     body["address"] = address;
     body["description"] = description;
     body["available"] = available ? 1 : 0;
     QByteArray bodyData = QJsonDocument(body).toJson();
-    QNetworkReply *reply = m_net.post(request, bodyData);
+    QNetworkReply *reply = m_net.put(request, bodyData);
     QObject::connect(reply, &QNetworkReply::finished, [this, reply](){
         if(reply->error()!=QNetworkReply::NoError)
             emit editHotelError(reply->errorString());
@@ -101,7 +101,7 @@ void HotelsManager::deleteHotel(int id)
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;
-    body["sessionToken"] = m_currentSession->token();
+    body["token"] = m_currentSession->token();
     body["id"] = id;
     QByteArray bodyData = QJsonDocument(body).toJson();
     QNetworkReply *reply = m_net.post(request, bodyData);
