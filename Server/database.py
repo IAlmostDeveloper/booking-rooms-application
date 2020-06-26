@@ -42,6 +42,11 @@ class DatabaseManager:
             rights text
             
             )""")
+            cursor.execute("""create table sessions(
+            id integer primary key, 
+            login text,
+            token text
+            )""")
             DatabaseManager.fillDBWithExampleData()
         conn.commit()
 
@@ -97,6 +102,13 @@ class DatabaseManager:
         conn.commit()
 
     @staticmethod
+    def addSession(login, token):
+        cursor.execute("insert into sessions(login, token)"
+                       "values('{login}', '{token}')"
+                       .format(login=login, token=token))
+        conn.commit()
+
+    @staticmethod
     def updateHotel(id, name, address, description, available):
         cursor.execute(
             "update hotels set name='{name}', address='{address}', "
@@ -108,7 +120,7 @@ class DatabaseManager:
     def updateRoom(id, hotel, description, available):
         cursor.execute(
             "update rooms set hotel='{hotel}', description='{description}', available='{available}' where id='{id}'"
-            .format(id=id, hotel=hotel, description=description, available=available))
+                .format(id=id, hotel=hotel, description=description, available=available))
         conn.commit()
 
     @staticmethod
@@ -259,6 +271,18 @@ class DatabaseManager:
 
     @staticmethod
     def getUserRights(login):
-        cursor.execute("select rights from users where login='{login}'".format(login=login))
+        cursor.execute("select rights from users where login='{login}'".format(login=login[0]))
         conn.commit()
         return cursor.fetchone()
+
+    @staticmethod
+    def checkSession(token):
+        cursor.execute("select login from sessions where token='{token}'".format(token=token))
+        conn.commit()
+        return len(cursor.fetchall()) != 0
+
+    @staticmethod
+    def getLoginByToken(token):
+        cursor.execute("select login from sessions where token='{token}'".format(token=token))
+        conn.commit()
+        return cursor.fetchall()
