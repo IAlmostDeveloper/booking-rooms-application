@@ -13,6 +13,15 @@ App::App(QObject *parent)
     QObject::connect(m_authManager, &AuthManager::authFinished, this, &App::initSession);
 }
 
+App::~App()
+{
+    delete m_hotelsManager;
+    delete m_roomsManager;
+    delete m_rentsManager;
+    delete m_authManager;
+    delete m_session;
+}
+
 AuthManager* App::authManager()
 {
     return m_authManager;

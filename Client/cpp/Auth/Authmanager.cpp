@@ -14,6 +14,11 @@ AuthManager::AuthManager()
     m_isRegProcessing = false;
 }
 
+AuthManager::~AuthManager()
+{
+    m_net.deleteLater();
+}
+
 void AuthManager::auth(const QString &login, const QString &password){
     setAuthProcessing(true);
     QUrl url("http://localhost:8080/auth");

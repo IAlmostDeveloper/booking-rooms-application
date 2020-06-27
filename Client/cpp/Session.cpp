@@ -8,6 +8,11 @@ Session::Session()
     getUserRights();
 }
 
+Session::~Session()
+{
+
+}
+
 Session::Session(const QString token, const QString &login, bool isAdmin)
 {
     setToken(token);

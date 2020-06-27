@@ -11,6 +11,7 @@ class RentsManager : public QObject
     Q_PROPERTY(RentsModel* rentsModel READ rentsModel WRITE setRentsModel NOTIFY rentsModelChanged)
 public:
     explicit RentsManager(Session* session = nullptr);
+    virtual ~RentsManager();
     Q_INVOKABLE void getUserRents(const QString& login);
     Q_INVOKABLE void getAllRents();
     Q_INVOKABLE void addUserRent(int roomId, const QString& user,

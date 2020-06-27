@@ -12,6 +12,7 @@ class Session : public QObject
 
 public: 
     explicit Session();
+    virtual ~Session();
     Session(const QString token, const QString &login, bool isAdmin);
     bool isValid() const;
     QString token();

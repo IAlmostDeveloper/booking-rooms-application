@@ -11,6 +11,13 @@ RentsManager::RentsManager(Session *session)
     setRentsModel(new RentsModel());
 }
 
+RentsManager::~RentsManager()
+{
+    delete m_rentsModel;
+    delete m_currentSession;
+    m_net.deleteLater();
+}
+
 void RentsManager::getUserRents(const QString &login)
 {
     QString uri = "user-rents";

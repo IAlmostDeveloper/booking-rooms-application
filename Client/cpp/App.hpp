@@ -18,7 +18,7 @@ class App : public QObject
     Q_PROPERTY(RentsManager* rentsManager READ rentsManager WRITE setRentsManager NOTIFY rentsManagerChanged)
 public:
     App(QObject *parent = nullptr);
-
+    virtual ~App();
     AuthManager* authManager();
     Session* session();
     HotelsManager* hotelsManager();

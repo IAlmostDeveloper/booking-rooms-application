@@ -11,6 +11,13 @@ RoomsManager::RoomsManager(Session *session)
     setRoomsModel(new RoomsModel());
 }
 
+RoomsManager::~RoomsManager()
+{
+    delete m_roomsModel;
+    delete m_currentSession;
+    m_net.deleteLater();
+}
+
 void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel)
 {
     QString uri = !isOnlyAvailable && hotel=="" ? "rooms" :
@@ -131,7 +138,7 @@ void RoomsManager::editRoom(int id, const QString &hotel, const QString &descrip
 
 void RoomsManager::deleteRoom(int id)
 {
-    QUrl url(QString("http://localhost:8080/delete/room"));
+    QUrl url(QString("http://localhost:8080/deleste/room"));
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     QJsonObject body;

@@ -12,6 +12,13 @@ HotelsManager::HotelsManager(Session *session)
     setHotelsModel(new HotelsModel());
 }
 
+HotelsManager::~HotelsManager()
+{
+    delete m_hotelsModel;
+    delete m_currentSession;
+    m_net.deleteLater();
+}
+
 void HotelsManager::getParsedHotelsList()
 {
     QString str = QString("http://localhost:8080/hotels?token=%1")
