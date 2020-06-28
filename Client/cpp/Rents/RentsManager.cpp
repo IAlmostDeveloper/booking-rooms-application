@@ -5,17 +5,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-RentsManager::RentsManager(Session *session)
+RentsManager::RentsManager(QObject* parent, Session *session) : QObject(parent)
 {
     m_currentSession = session;
     setRentsModel(new RentsModel());
-}
-
-RentsManager::~RentsManager()
-{
-    delete m_rentsModel;
-    delete m_currentSession;
-    m_net.deleteLater();
 }
 
 void RentsManager::getUserRents(const QString &login)

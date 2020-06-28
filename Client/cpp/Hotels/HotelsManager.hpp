@@ -10,8 +10,7 @@ class HotelsManager : public QObject
     Q_OBJECT
     Q_PROPERTY(HotelsModel* hotelsModel READ hotelsModel WRITE setHotelsModel NOTIFY hotelsModelChanged)
 public:
-    explicit HotelsManager(Session* session = nullptr);
-    virtual ~HotelsManager();
+    explicit HotelsManager(QObject* parent, Session* session = nullptr);
     Q_INVOKABLE void getParsedHotelsList();
     Q_INVOKABLE void addHotelToDatabase(const QString& name, const QString& address,
                                         const QString& description, bool available);

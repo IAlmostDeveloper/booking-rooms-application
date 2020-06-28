@@ -11,8 +11,7 @@ class RoomsManager : public QObject
     Q_PROPERTY(RoomsModel* roomsModel READ roomsModel WRITE setRoomsModel NOTIFY roomsModelChanged)
 
 public:
-    explicit RoomsManager(Session* session = nullptr);
-    virtual ~RoomsManager();
+    explicit RoomsManager(QObject* parent, Session* session = nullptr);
     Q_INVOKABLE void getParsedRoomsList(bool isOnlyAvailable, const QString& hotel = "");
     Q_INVOKABLE void getRoom(int id);
     Q_INVOKABLE void addRoomToDatabase(const QString& hotel,

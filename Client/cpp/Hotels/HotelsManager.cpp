@@ -6,17 +6,10 @@
 #include <QNetworkReply>
 #include <QRegExp>
 
-HotelsManager::HotelsManager(Session *session)
+HotelsManager::HotelsManager(QObject* parent, Session *session) : QObject(parent)
 {
     m_currentSession = session;
     setHotelsModel(new HotelsModel());
-}
-
-HotelsManager::~HotelsManager()
-{
-    delete m_hotelsModel;
-    delete m_currentSession;
-    m_net.deleteLater();
 }
 
 void HotelsManager::getParsedHotelsList()

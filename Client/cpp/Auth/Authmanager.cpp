@@ -8,7 +8,7 @@
 #include <QDebug>
 #include <QString>
 
-AuthManager::AuthManager()
+AuthManager::AuthManager(QObject* parent) : QObject(parent)
 {
     m_isAuthProcessing = false;
     m_isRegProcessing = false;

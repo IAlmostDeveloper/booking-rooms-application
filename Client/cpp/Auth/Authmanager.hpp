@@ -10,7 +10,7 @@ class AuthManager : public QObject
     Q_PROPERTY(bool isAuthProcessing READ isAuthProcessing WRITE setAuthProcessing NOTIFY authProcessingChanged)
     Q_PROPERTY(bool isRegProcessing READ isRegProcessing WRITE setRegProcessing NOTIFY regProcessingChanged)
 public:
-    explicit AuthManager();
+    explicit AuthManager(QObject* parent);
     virtual ~AuthManager();
     Q_INVOKABLE void auth(const QString& login, const QString& password);
     Q_INVOKABLE void reg(const QString& login, const QString& password, const QString& firstName,

@@ -4,22 +4,13 @@
 
 App::App(QObject *parent)
 {
-    setSession(new Session());
+    setSession(new Session(this));
     setAuthManager(new AuthManager());
     setHotelsManager(new HotelsManager(m_session));
     setRoomsManager(new RoomsManager(m_session));
     setRentsManager(new RentsManager(m_session));
 
     QObject::connect(m_authManager, &AuthManager::authFinished, this, &App::initSession);
-}
-
-App::~App()
-{
-    delete m_hotelsManager;
-    delete m_roomsManager;
-    delete m_rentsManager;
-    delete m_authManager;
-    delete m_session;
 }
 
 AuthManager* App::authManager()

@@ -5,17 +5,10 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
-RoomsManager::RoomsManager(Session *session)
+RoomsManager::RoomsManager(QObject* parent, Session *session) : QObject(parent)
 {
     m_currentSession = session;
     setRoomsModel(new RoomsModel());
-}
-
-RoomsManager::~RoomsManager()
-{
-    delete m_roomsModel;
-    delete m_currentSession;
-    m_net.deleteLater();
 }
 
 void RoomsManager::getParsedRoomsList(bool isOnlyAvailable, const QString& hotel)

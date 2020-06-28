@@ -11,8 +11,7 @@ class Session : public QObject
     Q_PROPERTY(bool isAdmin READ isAdmin WRITE setIsAdmin NOTIFY isAdminChanged)
 
 public: 
-    explicit Session();
-    virtual ~Session();
+    explicit Session(QObject* parent);
     Session(const QString token, const QString &login, bool isAdmin);
     bool isValid() const;
     QString token();

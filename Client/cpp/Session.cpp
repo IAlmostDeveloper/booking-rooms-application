@@ -3,14 +3,9 @@
 #include <QNetworkReply>
 
 
-Session::Session()
+Session::Session(QObject* parent) : QObject(parent)
 {
     getUserRights();
-}
-
-Session::~Session()
-{
-
 }
 
 Session::Session(const QString token, const QString &login, bool isAdmin)
