@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
     qmlRegisterSingletonType<App>("App", 1, 0, "App", [](QQmlEngine *engine, QJSEngine *scriptEngine) -> QObject * {
         Q_UNUSED(engine)
         Q_UNUSED(scriptEngine)
-        static App* application = new App();
+        App* application = new App();
         return application;
     });
 
